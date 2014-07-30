@@ -14,7 +14,7 @@ public interface iContent {
 	void setPath(String path) throws ContentException;
 	void setModify(boolean modify);
 	boolean isModify();
-	ArrayList<iContent> getChilds();
+	ArrayList<iContent> getChilds() throws ContentException;
 	void addChild(iContent chid);
 	void sync() throws ContentException;
 	void commit() throws ContentException;

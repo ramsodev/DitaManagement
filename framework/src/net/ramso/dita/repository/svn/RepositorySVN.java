@@ -24,8 +24,16 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * @author ramso
  *
  */
-public class repository implements IRepository {
+public class RepositorySVN implements IRepository {
 	SVNRepository repository = null;
+	public SVNRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(SVNRepository repository) {
+		this.repository = repository;
+	}
+
 	private String url;
 	private String name;
 	private String password;
@@ -33,7 +41,7 @@ public class repository implements IRepository {
 	/**
 	 * 
 	 */
-	public repository() {
+	public RepositorySVN() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,9 +52,9 @@ public class repository implements IRepository {
 	 */
 	@Override
 	public void setup(Properties properties) throws ContentException {
-		url = "http://svn.svnkit.com/repos/svnkit/trunk/doc";
-		name = "anonymous";
-		password = "anonymous";
+		url = "svn://192.168.1.2/proyectos";
+		name = "ramso";
+		password = "aurin";
 
 	}
 
@@ -87,32 +95,7 @@ public class repository implements IRepository {
 	 */
 	@Override
 	public iContent getRootContent() throws ContentException {
-		SVNNodeKind nodeKind;
-		try {
-			nodeKind = repository.checkPath( "" ,  -1 );
-			if ( nodeKind == SVNNodeKind.NONE ) {
-	            throw new ContentException( "There is no entry at '" + url + "'." );
-	        } else if ( nodeKind == SVNNodeKind.FILE ) {
-	        	throw new ContentException( "The entry at '" + url + "' is a file while a directory was expected." );
-	           
-	        }
-			Collection entries = repository.getDir( path, -1 , null , (Collection) null );
-	        Iterator iterator = entries.iterator( );
-	        while ( iterator.hasNext( ) ) {
-	            SVNDirEntry entry = ( SVNDirEntry ) iterator.next( );
-	            System.out.println( "/" + (path.equals( "" ) ? "" : path + "/" ) + entry.getName( ) + 
-	                               " ( author: '" + entry.getAuthor( ) + "'; revision: " + entry.getRevision( ) + 
-	                               "; date: " + entry.getDate( ) + ")" );
-	            if ( entry.getKind() == SVNNodeKind.DIR ) {
-	                listEntries( repository, ( path.equals( "" ) ) ? entry.getName( ) : path + "/" + entry.getName( ) );
-	            }
-	        }
-			
-		} catch (SVNException e) {
-			throw new ContentException(e);
-		}
-        
-		return null;
+		return getContent("");
 	}
 
 	/*
@@ -121,9 +104,20 @@ public class repository implements IRepository {
 	 * @see net.ramso.dita.repository.IRepository#getContent(java.lang.String)
 	 */
 	@Override
-	public iContent getContent(String path) {
-		// TODO Auto-generated method stub
-		return null;
+	public iContent getContent(String path) throws ContentException {
+		SVNNodeKind nodeKind;
+		try {
+			nodeKind = repository.checkPath(path, -1);
+			if (nodeKind == SVNNodeKind.NONE) {
+	            throw new ContentException("There is no entry at '" + url + "'.");
+	        } else if (nodeKind == SVNNodeKind.FILE) {
+	        	throw new ContentException("The entry at '" + url + "' is a file while a directory was expected.");
+	        }
+		} catch (SVNException e) {
+			throw new ContentException(e);
+		}
+		SVNContent content = new SVNContent(repository, path);
+		return content;
 	}
 
 	/*
