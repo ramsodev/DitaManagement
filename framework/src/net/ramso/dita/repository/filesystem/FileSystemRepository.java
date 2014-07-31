@@ -8,6 +8,8 @@ import java.util.Properties;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.iContent;
+import net.ramso.dita.repository.iFile;
+import net.ramso.dita.repository.iFolder;
 
 /**
  * @author ramso
@@ -53,7 +55,7 @@ public class FileSystemRepository implements IRepository {
 	 * @see net.ramso.dita.repository.IRepository#getRootContent()
 	 */
 	@Override
-	public iContent getRootContent() {
+	public iContent getRoot() {
 		
 		if(content==null){
 			content = new FileSystemFolder(root);
@@ -65,7 +67,7 @@ public class FileSystemRepository implements IRepository {
 	 * @see net.ramso.dita.repository.IRepository#getContent(java.lang.String)
 	 */
 	@Override
-	public iContent getContent(String path) {
+	public iFolder getFolder(String path) {
 		return new FileSystemFolder(path);
 	}
 
@@ -74,7 +76,7 @@ public class FileSystemRepository implements IRepository {
 	 */
 	@Override
 	public void commit() throws ContentException {
-		getRootContent().commit();
+		getRoot().commit();
 
 	}
 
@@ -83,8 +85,13 @@ public class FileSystemRepository implements IRepository {
 	 */
 	@Override
 	public void update() throws ContentException {
-		getRootContent().update();
+		getRoot().update();
 
+	}
+
+	@Override
+	public iFile getFile(String path) throws ContentException {
+		return new FileSystemFile(path);
 	}
 
 }

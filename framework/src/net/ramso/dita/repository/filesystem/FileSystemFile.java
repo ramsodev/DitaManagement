@@ -30,6 +30,10 @@ public class FileSystemFile extends AbstractFile implements iFile {
 		}
 	}
 
+	public FileSystemFile(String path) {
+		this(new File(path));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

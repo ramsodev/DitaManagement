@@ -52,7 +52,9 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 				super.commit();
 				if (isRename()) {
 					SVNTools.moveFolder(repository,  getRename(), getPath());
+					SVNTools.delete(repository, getPath());
 					setPath(getRename());
+					
 				}
 			}
 		} catch (SVNException e) {

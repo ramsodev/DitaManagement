@@ -1,14 +1,16 @@
 package net.ramso.dita.repository.svn;
 
 import java.util.ArrayList;
-import java.util.Properties;
-
-import org.tmatesoft.svn.core.SVNException;
 
 import net.ramso.dita.repository.ContentException;
+import net.ramso.dita.repository.IRepository;
+import net.ramso.dita.repository.RepositoryException;
+import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
+
+import org.tmatesoft.svn.core.SVNException;
 
 public class Test {
 
@@ -17,16 +19,21 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		RepositorySVN repo = new RepositorySVN();
+		IRepository repo;
 		try {
-			repo.setup(new Properties());
+			 repo = RepositoryFactory.getRepositoryInstance();
+			
 			repo.connect();
-			iContent content = repo.getRootContent();
-//			 createFolder(repo, content, "Test2");
+			iContent content = repo.getRoot();
+			 createFolder(repo, content, "Test");
 
-			iFolder iContent = (iFolder) repo.getContent("/Test");
-
-			// deleteFolder(repo, iContent, );
+//			iFolder iContent = (iFolder) repo.getContent("/Test");
+//
+//			deleteFolder(repo, iContent);
+			iFolder iContent = (iFolder) repo.getFolder("/Test");
+//			deleteFolder(repo, iContent);
+//			iContent = (iFolder) repo.getContent("/Test2");
+//			deleteFolder(repo, iContent);
 //			deleteFile(repo, iContent, iContent.getChilds().get(0));
 //			modFiles(repo, iContent, (iFile) iContent.getChilds().get(0));
 			 renameFolder(repo, content, iContent, "cambia");
@@ -43,11 +50,14 @@ public class Test {
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (RepositoryException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 	}
 
-	private static void deleteFile(RepositorySVN repo, iFolder iContent,
+	private static void deleteFile(IRepository repo, iFolder iContent,
 			iContent iContent2) throws ContentException, SVNException {
 		iContent2.setDelete(true);
 		iContent.commit();
@@ -55,16 +65,16 @@ public class Test {
 
 	}
 
-	private static void modFiles(RepositorySVN repo, iFolder folder, iFile file)
+	private static void modFiles(IRepository repo, iFolder folder, iFile file)
 			throws ContentException, SVNException {
 		file.setContent("Nuevo texto".getBytes());
 		folder.commit();
 		SVNTools.endCommit();
 	}
 
-	private static void addFiles(RepositorySVN repo, iFolder folder, String name)
+	private static void addFiles(IRepository repo, iFolder folder, String name)
 			throws ContentException {
-		SVNFile file = new SVNFile(repo.getRepository(), folder.getPath() + "/"
+		SVNFile file = new SVNFile(((RepositorySVN)repo).getRepository(), folder.getPath() + "/"
 				+ name);
 		file.setNew(true);
 		file.setContent("Texto de prueba".getBytes());
@@ -72,16 +82,16 @@ public class Test {
 
 	}
 
-	private static void deleteFolder(RepositorySVN repo, iFolder iContent)
+	private static void deleteFolder(IRepository repo, iFolder iContent)
 			throws ContentException, SVNException {
 		iContent.setDelete(true);
 		iContent.commit();
 		SVNTools.endCommit();
 	}
 
-	private static void createFolder(RepositorySVN repo, iContent content,
+	private static void createFolder(IRepository repo, iContent content,
 			String name) throws ContentException, SVNException {
-		SVNFolder folder = new SVNFolder(repo.getRepository(),
+		SVNFolder folder = new SVNFolder(((RepositorySVN)repo).getRepository(),
 				content.getPath() + "/" + name);
 		folder.setNew(true);
 		content.addChild(folder);
@@ -92,7 +102,7 @@ public class Test {
 
 	}
 
-	private static void renameFolder(RepositorySVN repo, iContent content,
+	private static void renameFolder(IRepository repo, iContent content,
 			iFolder folder, String name) throws ContentException, SVNException {
 
 		folder.rename(content.getPath() + "/" + name);

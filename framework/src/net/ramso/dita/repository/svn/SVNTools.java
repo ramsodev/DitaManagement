@@ -19,12 +19,15 @@ public class SVNTools {
 
 	private static ISVNEditor editor = null;
 	private static boolean active = false;
+	private static long l;
 
 	public static ISVNEditor getEditor(SVNRepository repository)
 			throws SVNException {
+		l = repository.getLatestRevision();
 		if (editor == null) {
 			editor = repository.getCommitEditor("Dita Manager commit", null);
 		}
+
 		return editor;
 	}
 
@@ -45,6 +48,7 @@ public class SVNTools {
 				info = editor.closeEdit();
 				editor = null;
 			}
+			active = false;
 		}
 		return info;
 
@@ -65,9 +69,13 @@ public class SVNTools {
 	public static void moveFolder(SVNRepository repository, String path,
 			String from) throws SVNException {
 		startCommit(repository);
-		String f = repository.getRepositoryPath(getName(from));
+		String f = null;
+		if (from != null) {
+			f = repository.getRepositoryPath(getName(from));
+		}
 		String t = getName(path);
-		editor.addDir(t, f, -1);
+		// long l = repository.getLatestRevision();
+		editor.addDir(t, f, l);
 		editor.closeDir();
 
 	}
@@ -109,9 +117,9 @@ public class SVNTools {
 	private static String getParentPath(String path) {
 		return path.substring(0, path.lastIndexOf("/"));
 	}
-	
-	private static String getName(String path){
-		return path.substring(path.indexOf("/")+1);
+
+	private static String getName(String path) {
+		return path.substring(path.indexOf("/") + 1);
 	}
 
 }
