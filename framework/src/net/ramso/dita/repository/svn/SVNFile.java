@@ -4,25 +4,25 @@
 package net.ramso.dita.repository.svn;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
+import net.ramso.dita.repository.AbstractFile;
+import net.ramso.dita.repository.ContentException;
+import net.ramso.dita.repository.iFile;
+
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import net.ramso.dita.repository.ContentException;
-import net.ramso.dita.repository.iContent;
-import net.ramso.dita.repository.iFile;
-
 /**
  * @author ramso
  *
  */
-public class SVNFile extends SVNContent implements iFile {
+public class SVNFile extends AbstractFile implements iFile {
 
 	private byte[] content;
+	private SVNRepository repository;
+	private byte[] oldcontent;
 
 	/**
 	 * 
@@ -31,40 +31,13 @@ public class SVNFile extends SVNContent implements iFile {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SVNFile(SVNRepository repository, String relativePath) {
-		super(repository, relativePath);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#getChilds()
-	 */
-	@Override
-	public ArrayList<iContent> getChilds() {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.ramso.dita.repository.iContent#addChild(net.ramso.dita.repository
-	 * .iContent)
-	 */
-	@Override
-	public void addChild(iContent chid) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#sync()
-	 */
-	@Override
-	public void sync() throws ContentException {
-		// TODO Auto-generated method stub
-
+	public SVNFile(SVNRepository repository, String path) {
+		this.repository = repository;
+		try {
+			setPath(path);
+		} catch (ContentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -74,7 +47,22 @@ public class SVNFile extends SVNContent implements iFile {
 	 */
 	@Override
 	public void commit() throws ContentException {
-		// TODO Auto-generated method stub
+		try {
+			if (isNew()) {
+				SVNTools.newFile(repository, getPath(), getContent());
+			}else if(isModify()){
+				SVNTools.updateFile(repository, getPath(), getContent(), getOldcontent());
+			}else if(isDelete()){
+				SVNTools.delete(repository, getPath());
+			}else if(isRename()){
+				SVNTools.newFile(repository, getRename(), getContent());
+				SVNTools.delete(repository, getPath());
+				setPath(getRename());
+			}
+			
+		} catch (SVNException e) {
+			throw new ContentException(e);
+		}
 
 	}
 
@@ -92,22 +80,11 @@ public class SVNFile extends SVNContent implements iFile {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see net.ramso.dita.repository.iContent#delete()
-	 */
-	@Override
-	public void delete() throws ContentException {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see net.ramso.dita.repository.iFile#getContent()
 	 */
 	@Override
 	public byte[] getContent() throws ContentException {
-		if (content == null) {
+		if (content == null && !isNew()) {
 			SVNProperties fileProperties = new SVNProperties();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			try {
@@ -138,20 +115,14 @@ public class SVNFile extends SVNContent implements iFile {
 	 * @see net.ramso.dita.repository.iFile#setContent(byte[])
 	 */
 	@Override
-	public void setContent(byte[] content) {
+	public void setContent(byte[] content) throws ContentException {
+		this.oldcontent = getContent();
+		setModify(getOldcontent()!=null);		
 		this.content = content;
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iFile#rename(java.lang.String)
-	 */
-	@Override
-	public void rename(String name) throws ContentException {
-		// TODO Auto-generated method stub
-
+	private byte[] getOldcontent() {
+		return oldcontent;
 	}
 
 }

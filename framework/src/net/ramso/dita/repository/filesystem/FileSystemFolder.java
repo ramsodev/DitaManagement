@@ -4,8 +4,10 @@
 package net.ramso.dita.repository.filesystem;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import net.ramso.dita.repository.AbstractFolder;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
@@ -14,13 +16,25 @@ import net.ramso.dita.repository.iFolder;
  * @author ramso
  *
  */
-public class FileSystemFolder extends FileSystemContent implements iFolder {
+public class FileSystemFolder extends AbstractFolder implements iFolder {
 
 	private File folder;
 
 	public FileSystemFolder(File file) {
 		super();
 		folder = file;
+		if (!folder.exists()) {
+			setNew(true);
+		}
+	}
+
+	public FileSystemFolder(String root) {
+		super();
+		try {
+			setPath(root);
+		} catch (ContentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -45,6 +59,9 @@ public class FileSystemFolder extends FileSystemContent implements iFolder {
 
 			if (!folder.isDirectory()) {
 				throw new ContentException("The " + path + " is not a folder");
+			}
+			if (!folder.exists()) {
+				setNew(true);
 			}
 		} catch (Exception e) {
 			throw new ContentException(e);
@@ -73,14 +90,19 @@ public class FileSystemFolder extends FileSystemContent implements iFolder {
 	}
 
 	@Override
-	public void rename(String name) throws ContentException {
+	public void commit() throws ContentException {
 		try {
-			File file = new File(folder.getParent(),name);
-			folder.renameTo(file);
-		} catch (Exception e) {
+			if (isNew()) {
+				folder.createNewFile();
+			} else if (isRename()) {
+				File file = new File(folder.getParent(), getRename());
+				folder.renameTo(file);
+			}
+			super.commit();
+		} catch (IOException e) {
 			throw new ContentException(e);
 		}
-		
+
 	}
 
 }

@@ -12,13 +12,15 @@ import java.util.ArrayList;
 public interface iContent {
 	String getPath();
 	void setPath(String path) throws ContentException;
-	void setModify(boolean modify);
+	void setModify(boolean change);
 	boolean isModify();
+	void setNew(boolean change);
+	boolean isNew();
+	void setDelete(boolean change);
+	boolean isDelete();
 	ArrayList<iContent> getChilds() throws ContentException;
-	void addChild(iContent chid);
-	void sync() throws ContentException;
+	void addChild(iContent child)throws ContentException;
 	void commit() throws ContentException;
 	void update() throws ContentException;
-	void delete() throws ContentException;
 
 }

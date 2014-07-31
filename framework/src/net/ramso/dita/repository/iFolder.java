@@ -10,4 +10,6 @@ package net.ramso.dita.repository;
 public interface iFolder extends iContent {
 
 	void rename(String name) throws ContentException;
+	String getRename();
+	boolean isRename();
 }

@@ -8,7 +8,6 @@ public interface IRepository {
 	void disconnect();
 	iContent getRootContent() throws ContentException;
 	iContent getContent(String path) throws ContentException;
-	void sync() throws ContentException;
 	void commit() throws ContentException;
 	void update() throws ContentException;
 	

@@ -4,10 +4,14 @@
 package net.ramso.dita.repository.svn;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
+import net.ramso.dita.repository.AbstractFolder;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
@@ -16,9 +20,9 @@ import net.ramso.dita.repository.iFolder;
  * @author ramso
  *
  */
-public class SVNFolder extends SVNContent implements iFolder {
+public class SVNFolder extends AbstractFolder implements iFolder {
 
-	
+	private SVNRepository repository;
 
 	/**
 	 * 
@@ -27,24 +31,48 @@ public class SVNFolder extends SVNContent implements iFolder {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	public SVNFolder(SVNRepository repository, String relativePath) {
-		super(repository, relativePath);
+	public SVNFolder(SVNRepository repository, String path) {
+		this.repository = repository;
+		try {
+			setPath(path);
+		} catch (ContentException e) {
+			e.printStackTrace();
+		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see net.ramso.dita.repository.iContent#sync()
-	 */
 	@Override
-	public void sync() throws ContentException {
-		// TODO Auto-generated method stub
+	public void commit() throws ContentException {
+		try {
+			if (isDelete()) {
+				SVNTools.delete(repository, getPath());
+			} else {
+				if (isNew()) {
+					SVNTools.newFolder(repository, getPath());
+				}
+				super.commit();
+				if (isRename()) {
+					SVNTools.moveFolder(repository,  getRename(), getPath());
+					setPath(getRename());
+				}
+			}
+		} catch (SVNException e) {
+			try {
+				SVNTools.abort();
+			} catch (SVNException e1) {
+				throw new ContentException(e);
+			}
+			throw new ContentException(e);
+		}
 
+		setNew(false);
+		rename(null);
+		setModify(false);
+		setDelete(false);
 	}
 
-	
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see net.ramso.dita.repository.iContent#update()
 	 */
 	@Override
@@ -53,22 +81,32 @@ public class SVNFolder extends SVNContent implements iFolder {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see net.ramso.dita.repository.iContent#delete()
-	 */
 	@Override
-	public void delete() throws ContentException {
-		// TODO Auto-generated method stub
+	public ArrayList<iContent> getChilds() throws ContentException {
+		if (childs == null) {
+			childs = new ArrayList<iContent>();
+			if (isNew()) {
+				return childs;
+			}
 
-	}
+			Collection<SVNDirEntry> entries;
+			try {
 
-	/* (non-Javadoc)
-	 * @see net.ramso.dita.repository.iFolder#rename(java.lang.String)
-	 */
-	@Override
-	public void rename(String name) throws ContentException {
-		// TODO Auto-generated method stub
-
+				entries = repository.getDir(path, -1, null, (Collection) null);
+				for (SVNDirEntry entry : entries) {
+					if (entry.getKind() == SVNNodeKind.DIR) {
+						childs.add(new SVNFolder(repository, getPath() + "/"
+								+ entry.getRelativePath()));
+					} else if (entry.getKind() == SVNNodeKind.FILE) {
+						childs.add(new SVNFile(repository, getPath() + "/"
+								+ entry.getRelativePath()));
+					}
+				}
+			} catch (SVNException e) {
+				throw new ContentException(e);
+			}
+		}
+		return childs;
 	}
 
 }

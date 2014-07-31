@@ -16,7 +16,7 @@ import net.ramso.dita.repository.iContent;
 public class FileSystemRepository implements IRepository {
 
 	private String root;
-	private FileSystemContent content;
+	private FileSystemFolder content;
 
 	/**
 	 * 
@@ -56,7 +56,7 @@ public class FileSystemRepository implements IRepository {
 	public iContent getRootContent() {
 		
 		if(content==null){
-			content = new FileSystemContent(root);
+			content = new FileSystemFolder(root);
 		}
 		return content;
 	}
@@ -66,17 +66,7 @@ public class FileSystemRepository implements IRepository {
 	 */
 	@Override
 	public iContent getContent(String path) {
-		return new FileSystemContent(path);
-	}
-
-	/* (non-Javadoc)
-	 * @see net.ramso.dita.repository.IRepository#sync()
-	 */
-	@Override
-	public void sync() throws ContentException {
-		commit();
-		update();
-
+		return new FileSystemFolder(path);
 	}
 
 	/* (non-Javadoc)

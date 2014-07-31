@@ -121,12 +121,15 @@ public class Commit {
         /*
          * URL that points to repository. 
          */
-        SVNURL url = SVNURL.parseURIEncoded("svn://localhost/rep");
+    	
+    	String userName = "ramso";
+    	String userPassword = "aurin";
+        SVNURL url = SVNURL.parseURIEncoded("svn://192.168.1.2/proyectos");
         /*
          * Credentials to use for authentication.
          */
-        String userName = "foo";
-        String userPassword = "bar";
+//        String userName = "foo";
+//        String userPassword = "bar";
         
         /*
          * Sample file contents.

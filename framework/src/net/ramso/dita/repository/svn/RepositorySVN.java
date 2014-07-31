@@ -3,19 +3,19 @@
  */
 package net.ramso.dita.repository.svn;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Properties;
 
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.iContent;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
@@ -26,6 +26,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  */
 public class RepositorySVN implements IRepository {
 	SVNRepository repository = null;
+
 	public SVNRepository getRepository() {
 		return repository;
 	}
@@ -55,7 +56,9 @@ public class RepositorySVN implements IRepository {
 		url = "svn://192.168.1.2/proyectos";
 		name = "ramso";
 		password = "aurin";
-
+		DAVRepositoryFactory.setup();
+		SVNRepositoryFactoryImpl.setup();
+		FSRepositoryFactory.setup();
 	}
 
 	/*
@@ -109,26 +112,18 @@ public class RepositorySVN implements IRepository {
 		try {
 			nodeKind = repository.checkPath(path, -1);
 			if (nodeKind == SVNNodeKind.NONE) {
-	            throw new ContentException("There is no entry at '" + url + "'.");
-	        } else if (nodeKind == SVNNodeKind.FILE) {
-	        	throw new ContentException("The entry at '" + url + "' is a file while a directory was expected.");
-	        }
+				throw new ContentException("There is no entry at '" + url
+						+ "'.");
+			} else if (nodeKind == SVNNodeKind.FILE) {
+				throw new ContentException("The entry at '" + url
+						+ "' is a file while a directory was expected.");
+			}
 		} catch (SVNException e) {
 			throw new ContentException(e);
 		}
-		SVNContent content = new SVNContent(repository, path);
+		SVNFolder content = new SVNFolder(repository, path);
+
 		return content;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.IRepository#sync()
-	 */
-	@Override
-	public void sync() throws ContentException {
-		// TODO Auto-generated method stub
-
 	}
 
 	/*
@@ -138,8 +133,12 @@ public class RepositorySVN implements IRepository {
 	 */
 	@Override
 	public void commit() throws ContentException {
-		// TODO Auto-generated method stub
-
+		getRootContent().commit();
+		try {
+			SVNTools.endCommit();
+		} catch (SVNException e) {
+			throw new ContentException(e);
+		}
 	}
 
 	/*
@@ -149,7 +148,7 @@ public class RepositorySVN implements IRepository {
 	 */
 	@Override
 	public void update() throws ContentException {
-		// TODO Auto-generated method stub
+		getRootContent().update();
 
 	}
 
