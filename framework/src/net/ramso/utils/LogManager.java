@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 
 
 public class LogManager {
-	public static Logger logger = LoggerFactory.getLogger("SEPA");
+	
+	public static Logger logger = LoggerFactory.getLogger(ConfManager.APPNAME);
 
 	public static void info(String message){
 		logger.info(message);
