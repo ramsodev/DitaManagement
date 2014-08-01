@@ -34,7 +34,12 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 	public SVNFolder(SVNRepository repository, String path) {
 		this.repository = repository;
 		try {
+			setNew(false);
+			rename(null);
+			setModify(false);
+			setDelete(false);
 			setPath(path);
+			
 		} catch (ContentException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +84,12 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 	 */
 	@Override
 	public void update() throws ContentException {
-		// TODO Auto-generated method stub
+		childs=null;
+		getChilds();
+		setNew(false);
+		rename(null);
+		setModify(false);
+		setDelete(false);
 
 	}
 

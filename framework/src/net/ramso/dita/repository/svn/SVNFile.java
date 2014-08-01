@@ -34,6 +34,10 @@ public class SVNFile extends AbstractFile implements iFile {
 	public SVNFile(SVNRepository repository, String path) {
 		this.repository = repository;
 		try {
+			setNew(false);
+			rename(null);
+			setModify(false);
+			setDelete(false);
 			setPath(path);
 		} catch (ContentException e) {
 			e.printStackTrace();
@@ -73,7 +77,14 @@ public class SVNFile extends AbstractFile implements iFile {
 	 */
 	@Override
 	public void update() throws ContentException {
-		// TODO Auto-generated method stub
+		content=null;
+		oldcontent=null;
+		setNew(false);
+		rename(null);
+		setModify(false);
+		setDelete(false);
+		getContent();
+		
 
 	}
 
