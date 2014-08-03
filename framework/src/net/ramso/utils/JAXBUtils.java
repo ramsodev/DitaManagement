@@ -158,6 +158,11 @@ public class JAXBUtils {
 		Unmarshaller um = jaxbContext.createUnmarshaller();
 		return um.unmarshal(node);
 	}
+	
+	public Object unmarshall(byte[] content) throws JAXBException {
+		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		return this.unmarshall(bais);
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List getExtendedObjects(List<JAXBElement> objEls) {

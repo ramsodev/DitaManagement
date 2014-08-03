@@ -7,6 +7,15 @@
 	<classpathentry kind="lib" path="libs/openjpa-all-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-jdk14-1.7.7.jar"/>
+	<classpathentry kind="lib" path="libs/dita.bookmap.jar"/>
+	<classpathentry kind="lib" path="libs/dita.concept.jar"/>
+	<classpathentry kind="lib" path="libs/dita.glossentry.jar"/>
+	<classpathentry kind="lib" path="libs/dita.glossgroup.jar"/>
+	<classpathentry kind="lib" path="libs/dita.map.jar"/>
+	<classpathentry kind="lib" path="libs/dita.reference.jar"/>
+	<classpathentry kind="lib" path="libs/dita.task.jar"/>
+	<classpathentry kind="lib" path="libs/dita.topic.jar"/>
+	<classpathentry kind="lib" path="libs/dita.xsd.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>

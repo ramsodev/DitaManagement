@@ -96,6 +96,12 @@ public class RepositorySVN implements IRepository {
 	 */
 	@Override
 	public void disconnect() {
+		try {
+			SVNTools.endCommit();
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		repository.closeSession();
 
 	}
