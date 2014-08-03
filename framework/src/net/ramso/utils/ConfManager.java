@@ -74,21 +74,21 @@ public class ConfManager {
 	}
 
 	protected Properties getProperties(String name) {
-		Properties properties = new Properties();
+		Properties p = new Properties();
 		try {
-			ResourcesLocator locator = new ResourcesLocator(PROPERTIESNAME);
+			ResourcesLocator locator = new ResourcesLocator(name);
 
-			properties.load(locator.getInputStream());
+			p.load(locator.getInputStream());
 		} catch (Exception e) {
 			try {
-				properties.load(new FileInputStream(new File(PROPERTIESDIR
-						+ File.separator + PROPERTIESNAME)));
+				p.load(new FileInputStream(new File(PROPERTIESDIR
+						+ File.separator + name)));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
-		return properties;
+		return p;
 	}
 
 	public static ConfManager getInstance() {

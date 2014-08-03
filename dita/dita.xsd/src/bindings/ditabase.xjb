@@ -1,0 +1,41 @@
+<jxb:bindings version="2.1" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- <jxb:bindings schemaLocation="../xsd1.2-url/base/xsd/commonElementGrp.xsd">
+		<jxb:bindings node="//xs:group[@name='longdescref']">
+			<jxb:property name="longdesrefGrp" />
+		</jxb:bindings>
+	</jxb:bindings> -->
+	<jxb:bindings schemaLocation="../xsd1.2-url/base/xsd/commonElementMod.xsd">
+		<!-- <jxb:schemaBindings> <jxb:package name="net.ramso.dita.base" /> </jxb:schemaBindings> -->
+		<jxb:bindings node="//xs:attribute [@name='alt']">
+			<jxb:property name="altMod" />
+		</jxb:bindings>
+		<jxb:bindings
+			node="(//xs:group[@name='data-about.content']//xs:group[@ref='data'])[1]">
+			<jxb:property name="dataMod" />
+		</jxb:bindings>
+		<jxb:bindings
+			node="//xs:attributeGroup[@name='image.attributes']/xs:attribute[@name='longdescref']">
+			<jxb:property name="longdesrefImage" />
+		</jxb:bindings>
+		<jxb:bindings
+			node="//xs:attributeGroup[@name='object.attributes']/xs:attribute[@name='longdescref']">
+			<jxb:property name="longdesrefObject" />
+		</jxb:bindings>
+		<jxb:bindings
+			node="//xs:attributeGroup[@name='filter-atts']/xs:attribute[@name='audience']">
+			<jxb:property name="audienceMod" />
+		</jxb:bindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="../xsd1.2-url/base/xsd/hazardstatementDomain.xsd">
+		<jxb:bindings node="//xs:attribute[@name='longdescref']">
+			<jxb:property name="longdescrefDomain" />
+		</jxb:bindings>
+	</jxb:bindings>
+	  <jxb:bindings schemaLocation="../xsd1.2-url/technicalContent/xsd/glossentryMod.xsd">
+		<jxb:bindings node="//xs:attribute[@name='longdescref']">
+			<jxb:property name="longdescrefMod" />
+		</jxb:bindings>
+	</jxb:bindings>  
+</jxb:bindings>

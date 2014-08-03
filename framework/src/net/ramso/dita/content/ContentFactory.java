@@ -16,7 +16,7 @@ import net.ramso.dita.repository.iFolder;
  *
  */
 public class ContentFactory {
-
+	public static final String PREFIX = "content";
 	public static String projectRoot = "/project";
 	public static String templatesRoot = "/General/templates";
 	public static String componentsRoot = "/General/Componentes";
@@ -57,8 +57,9 @@ public class ContentFactory {
 	}
 
 	public static void config(Properties properties) {
-		// TODO Auto-generated method stub
-		
+		projectRoot = properties.getProperty(PREFIX + ".path.projects");
+		templatesRoot = properties.getProperty(PREFIX + ".path.templates");
+		componentsRoot = properties.getProperty(PREFIX + ".path.components");
 	}
 
 }
