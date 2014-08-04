@@ -1,10 +1,7 @@
 package net.ramso.dita.repository.svn;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import net.ramso.dita.content.ContentFactory;
+import net.ramso.dita.repository.iFolder;
 import net.ramso.utils.ApplicationConfiguration;
 
 public class test2 {
@@ -19,9 +16,10 @@ public class test2 {
 		ac.setupRepository();
 		ContentFactory cFactory = new ContentFactory();
 		try {
-			// iFolder ps = cFactory.getProjects();
-			// System.out.println(ps.getPath());
-			// Files.readAllBytes("");
+			
+			 iFolder ps = cFactory.getProjects();
+			 System.out.println(ps.getPath());
+//			 Files.readAllBytes("");
 //			Path path = FileSystems.getDefault().getPath(
 //					"/home/ramso/Dropbox/Trabajo/sibbac/DDR/", "ddr.ditamap");
 //			byte[] b = Files.readAllBytes(path);

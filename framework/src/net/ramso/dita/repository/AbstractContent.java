@@ -152,11 +152,11 @@ public abstract class AbstractContent implements iContent {
 	 */
 	@Override
 	public void addChild(iContent child) throws ContentException{
-		if (childs == null) {
+		if (getChilds() == null) {
 			childs = new ArrayList<iContent>();
 		}
 		setModify(true);
-		childs.add(child);
+		getChilds().add(child);
 	}
 
 }

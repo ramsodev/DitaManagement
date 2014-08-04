@@ -69,6 +69,7 @@ public class ContentFactory {
 	protected IRepository getRepository() throws RepositoryException {
 		if (repository == null) {
 			repository = RepositoryFactory.getRepositoryInstance();
+			repository.connect();
 		}
 		return repository;
 	}

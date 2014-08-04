@@ -1,16 +1,20 @@
 package net.ramso.utils;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
-import org.apache.commons.collections.functors.StringValueTransformer;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import net.ramso.dita.content.ContentFactory;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
+import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.dita.repository.svn.RepositorySVN;
+import net.ramso.dita.repository.svn.SVNFolder;
 import net.ramso.dita.repository.svn.SVNTools;
 
 public class ApplicationConfiguration {
@@ -31,16 +35,11 @@ public class ApplicationConfiguration {
 		try {
 			IRepository rf = RepositoryFactory.getRepositoryInstance();
 			rf.connect();
-			String[] ps = ContentFactory.projectRoot.split("/");
-			String pt= "/";
-			for (String p : ps) {
-				if (!p.trim().isEmpty()) {
-					pt+=p;
-					iFolder folder = rf.getFolder(pt);
-					folder.commit();
-				}
-			}
 
+			iFolder folder = rf.getFolder(ContentFactory.projectRoot);
+			iFolder folder2 = rf.getFolder(ContentFactory.templatesRoot);
+			iFolder folder3 = rf.getFolder(ContentFactory.componentsRoot);
+			rf.commit();
 			rf.disconnect();
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
@@ -52,4 +51,19 @@ public class ApplicationConfiguration {
 
 	}
 
+	private void createFolder(IRepository repo, iContent content, String name)
+			throws ContentException, SVNException {
+		iFolder folder = repo.getFolder(name);
+		// new SVNFolder(((RepositorySVN)repo).getRepository(),
+		// content.getPath() + "/" + name);
+		// if (folder.isNew()) {
+		//
+		// repo.getRoot().addChild(folder);
+		// }
+		iContent a = repo.getRoot();
+		ArrayList<iContent> c = a.getChilds();
+		repo.commit();
+		// SVNTools.endCommit();
+
+	}
 }

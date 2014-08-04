@@ -39,7 +39,14 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 			setModify(false);
 			setDelete(false);
 			setPath(path);
-			
+			try {
+				if (!SVNTools.exist(repository, path)) {
+					setNew(true);
+				}
+			} catch (SVNException e) {
+				e.printStackTrace();
+			}
+
 		} catch (ContentException e) {
 			e.printStackTrace();
 		}
@@ -56,10 +63,10 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 				}
 				super.commit();
 				if (isRename()) {
-					SVNTools.moveFolder(repository,  getRename(), getPath());
+					SVNTools.moveFolder(repository, getRename(), getPath());
 					SVNTools.delete(repository, getPath());
 					setPath(getRename());
-					
+
 				}
 			}
 		} catch (SVNException e) {
@@ -84,7 +91,7 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 	 */
 	@Override
 	public void update() throws ContentException {
-		childs=null;
+		childs = null;
 		getChilds();
 		setNew(false);
 		rename(null);
@@ -119,6 +126,12 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 			}
 		}
 		return childs;
+	}
+
+	@Override
+	public void addChild(iContent child) throws ContentException {
+		
+		super.addChild(child);
 	}
 
 }
