@@ -13,6 +13,7 @@ import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
 
+import org.apache.commons.collections.functors.StringValueTransformer;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNURL;
@@ -33,6 +34,7 @@ public class RepositorySVN implements IRepository {
 	private SVNURL url;
 	private ISVNAuthenticationManager authManager;
 	private iFolder root = null;
+	private boolean add;
 
 	public SVNRepository getRepository() {
 		return repository;
@@ -117,7 +119,7 @@ public class RepositorySVN implements IRepository {
 	 */
 	@Override
 	public iContent getRoot() throws ContentException {
-		if(root == null){
+		if (root == null) {
 			root = getFolder("");
 		}
 		return root;
@@ -143,45 +145,25 @@ public class RepositorySVN implements IRepository {
 		} catch (SVNException e) {
 			throw new ContentException(e);
 		}
-		
+
 		SVNFolder content = new SVNFolder(repository, path);
-		content.setNew(create);
-		if(create){
-			getParent(path).addChild(content);
-		}else if(!path.isEmpty()){
-			getContentFromRoot(path).addChild(content);
-		}
+		// content.setNew(create);
+		// if(create){
+		// getParent(path).addChild(content);
+		// }else if(!path.isEmpty()){
+		// getContentFromRoot(path).addChild(content);
+		// }
 		return content;
 	}
 
-	private iContent getContentFromRoot(String path) throws ContentException {
-		String[] ps = path.split("/");
-		 ArrayList<iContent> cs = getRoot().getChilds();
-		int i=0;
-		for (iContent c : cs) {
-			if(i>ps.length){
-				break;
-			}
-			if(ps[i].isEmpty()){
-				i++;
-			}else{
-				if(getName(c.getPath()).equals(ps[i])){
-					if(i==ps.length){
-						return c;
-					}else{
-						getContentFromRoot(getParentPath(path));
-					}
-				}
-			}
-		}
-		return null;
-	}
 	private static String getParentPath(String path) {
 		return path.substring(0, path.lastIndexOf("/"));
 	}
+
 	private static String getName(String path) {
 		return path.substring(path.lastIndexOf("/"));
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -204,7 +186,7 @@ public class RepositorySVN implements IRepository {
 	 */
 	@Override
 	public void update() throws ContentException {
-		root=null;
+		root = null;
 		getRoot().update();
 
 	}
@@ -228,12 +210,56 @@ public class RepositorySVN implements IRepository {
 		content.setNew(create);
 		return content;
 	}
+
 	public iFolder getParent(String path) throws ContentException {
-		String parent = path.substring(0,path.lastIndexOf("/"));
-		if(parent.trim().isEmpty()){
+		String parent = path.substring(0, path.lastIndexOf("/"));
+		if (parent.trim().isEmpty()) {
 			return (iFolder) getRoot();
 		}
 		return getFolder(parent);
 	}
-	
+
+	public void addChild(iContent child) throws ContentException {
+		try {
+			if (!SVNTools.exist(repository, child.getPath())) {
+				String parent = child.getPath().substring(0,
+						child.getPath().lastIndexOf("/"));
+				int idx = parent.indexOf("/");
+				iContent content = getRoot();
+				while (true) {
+					int idx2 = parent.indexOf("/", idx + 1);
+					if (idx2 == -1) {
+						idx2 = parent.length();
+					}
+					String element = parent.substring(0, idx2);
+					idx = parent.indexOf("/", idx + 1);
+					add = true;
+					iContent c = getContent(content, element);
+					if (add) {
+						content.addChild(c);
+					}
+					content = c;
+					if (idx == -1)
+						break;
+				}
+				content.addChild(child);
+			}
+		} catch (SVNException e) {
+			throw new ContentException(e);
+		}
+	}
+
+	private iContent getContent(iContent content, String path)
+			throws ContentException {
+		
+		ArrayList<iContent> cs = content.getChilds();
+		for (iContent c : cs) {
+			if (c.getPath().equals(path)) {
+				add = false;
+				return c;
+			}
+		}
+		add = true;
+		return getFolder(path);
+	}
 }

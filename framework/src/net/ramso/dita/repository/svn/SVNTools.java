@@ -148,9 +148,9 @@ public class SVNTools {
 		return o;
 	}
 
-	public static boolean exist(SVNRepository repository, String parent)
+	public static boolean exist(SVNRepository repository, String path)
 			throws SVNException {
-		SVNNodeKind nodeKind = repository.checkPath(parent, -1);
+		SVNNodeKind nodeKind = repository.checkPath(path, -1);
 		if (nodeKind == SVNNodeKind.NONE) {
 			return false;
 		}

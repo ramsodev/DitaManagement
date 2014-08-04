@@ -135,5 +135,9 @@ public class SVNFile extends AbstractFile implements iFile {
 	private byte[] getOldcontent() {
 		return oldcontent;
 	}
+	@Override
+	public String toString() {
+		return getPath();
+	}
 
 }

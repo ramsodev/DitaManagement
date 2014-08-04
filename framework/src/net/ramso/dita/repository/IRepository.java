@@ -11,7 +11,8 @@ public interface IRepository {
 	iFile getFile(String path) throws ContentException;
 	void commit() throws ContentException;
 	void update() throws ContentException;
-	
+	iFolder getParent(String path) throws ContentException;
+	void addChild(iContent child) throws ContentException;
 	
 
 }

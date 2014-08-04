@@ -54,6 +54,7 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 
 	@Override
 	public void commit() throws ContentException {
+		System.out.println(getPath());
 		try {
 			if (isDelete()) {
 				SVNTools.delete(repository, getPath());
@@ -107,11 +108,9 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 			if (isNew()) {
 				return childs;
 			}
-
 			Collection<SVNDirEntry> entries;
 			try {
-
-				entries = repository.getDir(path, -1, null, (Collection) null);
+				entries = repository.getDir(getPath(), -1, null, (Collection) null);
 				for (SVNDirEntry entry : entries) {
 					if (entry.getKind() == SVNNodeKind.DIR) {
 						childs.add(new SVNFolder(repository, getPath() + "/"
@@ -129,9 +128,10 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 	}
 
 	@Override
-	public void addChild(iContent child) throws ContentException {
-		
-		super.addChild(child);
+	public String toString() {
+		return getPath();
 	}
+
+	
 
 }

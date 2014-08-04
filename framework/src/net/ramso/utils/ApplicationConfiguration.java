@@ -12,8 +12,10 @@ import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iContent;
+import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
 import net.ramso.dita.repository.svn.RepositorySVN;
+import net.ramso.dita.repository.svn.SVNFile;
 import net.ramso.dita.repository.svn.SVNFolder;
 import net.ramso.dita.repository.svn.SVNTools;
 
@@ -34,11 +36,14 @@ public class ApplicationConfiguration {
 	public void setupRepository() {
 		try {
 			IRepository rf = RepositoryFactory.getRepositoryInstance();
-			rf.connect();
-
-			iFolder folder = rf.getFolder(ContentFactory.projectRoot);
-			iFolder folder2 = rf.getFolder(ContentFactory.templatesRoot);
-			iFolder folder3 = rf.getFolder(ContentFactory.componentsRoot);
+			rf.connect();			
+//			rf.addChild(rf.getFolder(ContentFactory.projectRoot));
+//			rf.addChild( rf.getFolder(ContentFactory.templatesRoot));
+//			rf.addChild(rf.getFolder(ContentFactory.componentsRoot));
+			rf.getFolder(ContentFactory.componentsRoot).getChilds();
+			iFile f = rf.getFile(ContentFactory.projectRoot+"/text.txt");
+			f.setContent("Borra esto pero ya".getBytes());
+			rf.addChild(f);
 			rf.commit();
 			rf.disconnect();
 		} catch (RepositoryException e) {
@@ -51,19 +56,5 @@ public class ApplicationConfiguration {
 
 	}
 
-	private void createFolder(IRepository repo, iContent content, String name)
-			throws ContentException, SVNException {
-		iFolder folder = repo.getFolder(name);
-		// new SVNFolder(((RepositorySVN)repo).getRepository(),
-		// content.getPath() + "/" + name);
-		// if (folder.isNew()) {
-		//
-		// repo.getRoot().addChild(folder);
-		// }
-		iContent a = repo.getRoot();
-		ArrayList<iContent> c = a.getChilds();
-		repo.commit();
-		// SVNTools.endCommit();
-
-	}
+	
 }

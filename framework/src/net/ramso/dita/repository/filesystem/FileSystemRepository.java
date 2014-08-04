@@ -94,4 +94,19 @@ public class FileSystemRepository implements IRepository {
 		return new FileSystemFile(path);
 	}
 
+	@Override
+	public iFolder getParent(String path) throws ContentException {
+		String parent = path.substring(0,path.lastIndexOf("/"));
+		if(parent.trim().isEmpty()){
+			return (iFolder) getRoot();
+		}
+		return getFolder(parent);
+	}
+
+	@Override
+	public void addChild(iContent child) throws ContentException {
+		getRoot().addChild(child);
+		
+	}
+
 }
