@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="DitaManagement">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
+        <dependent-module archiveName="framework.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/framework/framework">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.reference.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.reference.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.task.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.task.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.xsd.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.xsd.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/slf4j-api-1.7.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="openjpa-all-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/openjpa-all-2.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.map.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.map.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="svnkit-cli-1.8.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/svnkit-cli-1.8.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-jdk14-1.7.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/slf4j-jdk14-1.7.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.concept.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.concept.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.topic.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.topic.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.bookmap.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.bookmap.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.glossentry.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.glossentry.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.glossgroup.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.glossgroup.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="svnkit-1.8.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/svnkit-1.8.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="DitaManagement"/>
+        <property name="java-output-path" value="/DitaManagement/WebContent/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>
