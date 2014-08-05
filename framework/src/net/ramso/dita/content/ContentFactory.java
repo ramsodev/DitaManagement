@@ -20,6 +20,7 @@ import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
+import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
 import net.ramso.utils.TypesOfDocuments;
 
@@ -45,12 +46,14 @@ public class ContentFactory {
 	public ContentFactory() {
 	}
 
-	public void createProject(String name) {
-
+	public iFolder createProject(String name) throws ContentException, RepositoryException {
+		iFolder f = getProject(name);
+		getRepository().addChild(f);
+		return f;
 	}
 
-	public iFolder getProject(String name) {
-		return null;
+	public iFolder getProject(String name) throws ContentException, RepositoryException {
+		return getRepository().getFolder(projectRoot+"/"+name);
 
 	}
 
@@ -80,9 +83,10 @@ public class ContentFactory {
 		componentsRoot = properties.getProperty(PREFIX + ".path.components");
 	}
 
-	public Object getDitaDocument(byte[] content) throws ContentException {
+	public Object getDitaDocument(iFile file) throws ContentException {
 		try {
 			// return utils.unmarshall(content);
+			byte[] content = file.getContent();
 			System.out.println(getDataType(content));
 			JAXBContext jc = JAXBContext.newInstance("net.ramso.dita.bookmap");
 			SAXParserFactory spf = SAXParserFactory.newInstance();
