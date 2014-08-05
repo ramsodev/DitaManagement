@@ -37,13 +37,9 @@ public class ApplicationConfiguration {
 		try {
 			IRepository rf = RepositoryFactory.getRepositoryInstance();
 			rf.connect();			
-//			rf.addChild(rf.getFolder(ContentFactory.projectRoot));
-//			rf.addChild( rf.getFolder(ContentFactory.templatesRoot));
-//			rf.addChild(rf.getFolder(ContentFactory.componentsRoot));
-			rf.getFolder(ContentFactory.componentsRoot).getChilds();
-			iFile f = rf.getFile(ContentFactory.projectRoot+"/text.txt");
-			f.setContent("Borra esto pero ya".getBytes());
-			rf.addChild(f);
+			rf.addChild(rf.getFolder(ContentFactory.projectRoot));
+			rf.addChild( rf.getFolder(ContentFactory.templatesRoot));
+			rf.addChild(rf.getFolder(ContentFactory.componentsRoot));
 			rf.commit();
 			rf.disconnect();
 		} catch (RepositoryException e) {

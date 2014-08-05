@@ -1,0 +1,58 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
+	<ui:define name="content">
+
+		<p:growl id="mensajes" showDetail="true" life="5000" />
+		<p:layout fullPage="true">
+			<h:form>
+				<p:menubar>
+					<p:submenu label="File">
+						<p:submenu label="New">
+							<p:menuitem value="Project" url="#" />
+							<p:menuitem value="Other" url="#" />
+						</p:submenu>
+						<p:menuitem value="Open" url="#"></p:menuitem>
+						<p:menuitem value="Quit" url="#"></p:menuitem>
+					</p:submenu>
+					<p:submenu label="Edit">
+						<p:menuitem value="Undo" url="#"></p:menuitem>
+						<p:menuitem value="Redo" url="#"></p:menuitem>
+					</p:submenu>
+					<p:submenu label="Help">
+						<p:menuitem label="Contents" url="#" />
+						<p:submenu label="Search">
+							<p:submenu label="Text">
+								<p:menuitem value="Workspace" url="#" />
+							</p:submenu>
+							<p:menuitem value="File" url="#" />
+						</p:submenu>
+					</p:submenu>
+					<p:menuitem value="Logout" actionListener="#{loginBean.logout}" />
+				</p:menubar>
+			
+			<p:panelGrid columns="2">
+				<f:facet name="header">Basic PanelGrid</f:facet>
+
+				<p:panel toggleable="true" toggleOrientation="horizontal"
+					header="Arbolito">
+				</p:panel>
+				<p:panel toggleable="false" header="editor">
+				</p:panel>
+				<f:facet name="footer">
+					<p:commandButton type="button" value="Save" icon="ui-icon-check" />
+				</f:facet>
+			</p:panelGrid>
+			</h:form>
+		</p:layout>
+
+	</ui:define>
+</ui:composition>
+
+</html>
