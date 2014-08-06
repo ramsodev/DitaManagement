@@ -1,11 +1,9 @@
 package net.ramso.dita.jsf.components;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 
 import net.ramso.dita.content.ContentFactory;
 import net.ramso.dita.repository.ContentException;
@@ -17,22 +15,37 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean
-@ViewScoped
-public class ContentTree implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ContentTree {
+
+	private String name;
 	private TreeNode root;
+
+	public ContentTree(String name) {
+		this.name = name;
+		init();
+	}
 
 	@PostConstruct
 	public void init() {
 		ContentFactory cf = new ContentFactory();
 		try {
-			iFolder ps = cf.getProjects();
-			root = new DefaultTreeNode(ps.getPath());
-			addchilds(root, ps.getChilds());
+			System.out.println(name);
+			if (name.equals(ContentFactory.PROJECTLABEL)) {
+				iFolder ps = cf.getProjects();
+				root = new DefaultTreeNode(ps.getPath());
+				addchilds(root, ps.getChilds());
+			} else if (name.equals(ContentFactory.TEMPLATESLABEL)) {
+				iFolder ps = cf.getTemplates();
+				root = new DefaultTreeNode(ps.getPath());
+				addchilds(root, ps.getChilds());
+			} else if (name.equals(ContentFactory.COMPONENTSLABEL)) {
+				iFolder ps = cf.getComponents();
+				root = new DefaultTreeNode(ps.getPath());
+				addchilds(root, ps.getChilds());
+			}else{
+				root = new DefaultTreeNode("Vacio");
+			}
 		} catch (ContentException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
@@ -42,14 +55,22 @@ public class ContentTree implements Serializable {
 
 	private void addchilds(TreeNode parent, ArrayList<iContent> childs)
 			throws ContentException {
-		for (iContent child : childs) {
-			TreeNode node = new DefaultTreeNode(child.getPath(), parent);
-			addchilds(node, child.getChilds());
+		if (childs != null) {
+			for (iContent child : childs) {
+				TreeNode node = new DefaultTreeNode(child.getPath(), parent);
+				addchilds(node, child.getChilds());
+			}
 		}
 
 	}
 
 	public TreeNode getRoot() {
+		System.out.println(root.getChildCount());
 		return root;
 	}
+
+	public String getName() {
+		return name;
+	}
+
 }

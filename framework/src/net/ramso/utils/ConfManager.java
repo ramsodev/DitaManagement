@@ -21,6 +21,7 @@ public class ConfManager {
 	public static final String LOG_TYPE = "log.type";
 	public static final String LOGPREFIX = "log";
 	public static String APPNAME = "";
+	private static String ABSOLUTEDISKPATH = null;
 	private HashMap<String, Properties> propertiesFiles = new HashMap<String, Properties>();
 	private Properties properties;
 
@@ -39,6 +40,9 @@ public class ConfManager {
 	}
 
 	protected void init() {
+		if(ABSOLUTEDISKPATH == null){
+			ABSOLUTEDISKPATH = PROPERTIESDIR;
+		}
 		this.properties = getProperties(PROPERTIESNAME);
 		Enumeration<?> names = properties.propertyNames();
 		while (names.hasMoreElements()) {
@@ -81,7 +85,7 @@ public class ConfManager {
 			p.load(locator.getInputStream());
 		} catch (Exception e) {
 			try {
-				p.load(new FileInputStream(new File(PROPERTIESDIR
+				p.load(new FileInputStream(new File(ABSOLUTEDISKPATH
 						+ File.separator + name)));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -106,5 +110,10 @@ public class ConfManager {
 
 	public String getProperty(String key) {
 		return properties.getProperty(key);
+	}
+
+	public static ConfManager getInstance(String absoluteDiskPath) {
+		ABSOLUTEDISKPATH = absoluteDiskPath;
+		return getInstance();
 	}
 }
