@@ -6,26 +6,29 @@
 
 <ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
 	<ui:define name="content">
-	
-	 <p:growl id="mensajes" showDetail="true" life="5000" />
-		<h:form>
-			<p:panel header="Login">
-				<h:panelGrid columns="2" cellpadding="5">
-					<h:outputLabel for="username" value="Usuario:" />
-					<p:inputText value="#{loginBean.nombre}" id="username"
-						required="true" label="username" />
-					<h:outputLabel for="password" value="Clave:" />
-					<p:password value="#{loginBean.clave}" id="password"
-						required="true" label="password" />
-					<f:facet name="footer">
-						<p:commandButton id="loginButton" value="Login"
-							 actionListener="#{loginBean.login}" update=":mensajes"
-              />
-					</f:facet>
-				</h:panelGrid>
-			</p:panel>
 
-		</h:form>
+		<p:growl id="mensajes" showDetail="true" life="5000" />
+		<div class="ui-grid-col-4"></div>
+		<div class="ui-grid-col-4">
+			<h:form>
+				<p:panel header="Login" style="position:fixed;top:35%">
+					<h:panelGrid columns="2" cellpadding="5" >
+						<h:outputLabel for="username" value="Usuario:" />
+						<p:inputText value="#{loginBean.nombre}" id="username"
+							required="true" label="username" />
+						<h:outputLabel for="password" value="Clave:" />
+						<p:password value="#{loginBean.clave}" id="password"
+							required="true" label="password" />
+						<f:facet name="footer">
+							<p:commandButton id="loginButton" value="Login"
+								actionListener="#{loginBean.login}" update=":mensajes" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+
+			</h:form>
+		</div>
+		<div class="ui-grid-col-4"></div>
 	</ui:define>
 </ui:composition>
 

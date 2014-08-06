@@ -2,10 +2,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html" >
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 <h:body>
-	<div
-		style="width: 100%; font-size: 36px; line-height: 48px; background-color: navy; color: white">My
-		Facelet Application</div>
+	<h:form>
+		<div class="ui-grid-row">
+		<div class="ui-grid-col-2" style="text-align: left;"></div>
+			<div class="ui-grid-col-8">
+				<p:outputLabel value="Dita Management" />
+			</div>
+
+			<div class="ui-grid-col-2" style="text-align: right;">
+				<p:themeSwitcher id="basic" value="#{themeSwitcherView.theme}"
+					effect="fade" rendered="#{loginBean.logeado}">
+					<f:selectItem itemLabel="Choose Theme" itemValue="" />
+					<f:selectItems value="#{themeSwitcherView.themes}" />
+					<!-- <p:ajax listener="#{bean.saveTheme}" /> -->
+
+				</p:themeSwitcher>
+			</div>
+		</div>
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-12">
+				<p:menubar rendered="#{loginBean.logeado}" model="#{menuBar.model}">
+				</p:menubar>
+			</div>
+		</div>
+	</h:form>
+
 </h:body>
 </html>

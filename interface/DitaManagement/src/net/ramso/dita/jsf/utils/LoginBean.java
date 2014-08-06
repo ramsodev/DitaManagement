@@ -16,10 +16,31 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @SessionScoped
 public class LoginBean implements Serializable {
+	public boolean isLogeado() {
+		return logeado;
+	}
+
+	public void setLogeado(boolean logeado) {
+		this.logeado = logeado;
+	}
 	private static final long serialVersionUID = -2152389656664659476L;
+	private static final String DEFAULTTHEME = "bluesky";
 	private String nombre;
 	private String clave;
 	private boolean logeado = false;
+	private String theme = "glass-x";
+
+	public String getTheme() {
+		if(theme == null){
+			theme = DEFAULTTHEME;
+		}
+		System.out.println("theme:" + theme);
+		return theme;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
+	}
 
 	public boolean estaLogeado() {
 		return logeado;
