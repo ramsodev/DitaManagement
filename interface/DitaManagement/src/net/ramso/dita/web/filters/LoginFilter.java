@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.ramso.dita.jsf.utils.LoginBean;
+import net.ramso.dita.beans.tools.LoginBean;
 
 /**
  * Servlet Filter implementation class LoginFilter

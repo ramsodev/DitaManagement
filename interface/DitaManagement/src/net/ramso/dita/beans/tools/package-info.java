@@ -5,4 +5,4 @@
  * @author jescudero
  *
  */
-package net.ramso.dita.jsf.beans;
+package net.ramso.dita.beans.tools;

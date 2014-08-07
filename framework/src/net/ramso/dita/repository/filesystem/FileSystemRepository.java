@@ -31,7 +31,7 @@ public class FileSystemRepository implements IRepository {
 	 */
 	@Override
 	public void setup(Properties properties) {
-		root = properties.getProperty("filesystem.root");
+		root = properties.getProperty("filesystem.root"); //$NON-NLS-1$
 
 	}
 
@@ -96,7 +96,7 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public iFolder getParent(String path) throws ContentException {
-		String parent = path.substring(0,path.lastIndexOf("/"));
+		String parent = path.substring(0,path.lastIndexOf("/")); //$NON-NLS-1$
 		if(parent.trim().isEmpty()){
 			return (iFolder) getRoot();
 		}

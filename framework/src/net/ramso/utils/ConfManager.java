@@ -10,21 +10,22 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 
 public class ConfManager {
 
 	/**
 	 * Nombre del fichero de configuración
 	 */
-	public static final String PROPERTIESNAME = "configuration.properties";
-	public static final String PROPERTIESDIR = "resources/conf";
-	public static final String FILEPREFIX = "file.conf.";
+	public static final String PROPERTIESNAME = "configuration.properties"; //$NON-NLS-1$
+	public static final String PROPERTIESDIR = "resources/conf"; //$NON-NLS-1$
+	public static final String FILEPREFIX = "file.conf."; //$NON-NLS-1$
 	/**
 	 * Tipo de log a usar en la aplicación
 	 */
-	public static final String LOG_TYPE = "log.type";
-	public static final String LOGPREFIX = "log";
-	public static String APPNAME = "";
+	public static final String LOG_TYPE = "log.type"; //$NON-NLS-1$
+	public static final String LOGPREFIX = "log"; //$NON-NLS-1$
+	public static String APPNAME = ""; //$NON-NLS-1$
 	private static String ABSOLUTEDISKPATH = null;
 	private static ConfManager conf;
 	private HashMap<String, Properties> propertiesFiles = new HashMap<String, Properties>();
@@ -57,7 +58,7 @@ public class ConfManager {
 						getProperties(properties.getProperty(key)));
 
 			} else {
-				String k = key.substring(0, key.indexOf("."));
+				String k = key.substring(0, key.indexOf(".")); //$NON-NLS-1$
 				Properties p = new Properties();
 				if (propertiesFiles.containsKey(k)) {
 					p = propertiesFiles.get(k);
@@ -70,11 +71,11 @@ public class ConfManager {
 	}
 
 	public void initLogging() {
-		APPNAME = getProperty(LOGPREFIX + "." + "name");
+		APPNAME = getProperty(LOGPREFIX + "." + "name"); //$NON-NLS-1$ //$NON-NLS-2$
 		LOG_TYPES logtype = LOG_TYPES.valueOf(getProperty(LOG_TYPE));
 		switch (logtype) {
 		case jdk:
-			System.setProperty("java.util.logging.config.file",
+			System.setProperty("java.util.logging.config.file", //$NON-NLS-1$
 					getProperty(FILEPREFIX + LOGPREFIX));
 			break;
 
@@ -106,8 +107,8 @@ public class ConfManager {
 			conf = new ConfManager();
 			conf.init();
 			conf.initLogging();
-			LogManager.info("Logging for " + APPNAME
-					+ " application is initialized");
+			LogManager.info(Messages.getString(
+					"ConfManager.log.initialized", APPNAME)); //$NON-NLS-1$
 		}
 		return conf;
 	}
@@ -116,8 +117,8 @@ public class ConfManager {
 		return propertiesFiles.get(key);
 	}
 
-	public HashMap<String, Properties> getPropertiesFile() {
-		return propertiesFiles;
+	public Set<String> getPropertiesKeys() {
+		return propertiesFiles.keySet();
 	}
 
 	public String getProperty(String key) {
@@ -131,7 +132,8 @@ public class ConfManager {
 
 	public void update(String key, Properties pro) throws ConfigException {
 		Date today = new Date(System.currentTimeMillis());
-		String comments = today + " Modify in application";
+		String comments = today
+				+ Messages.getString("ConfManager.comment.properties.modify"); //$NON-NLS-1$
 		OutputStream out = null;
 		if (key.startsWith(FILEPREFIX)) {
 			String path = properties.getProperty(key);
@@ -142,16 +144,19 @@ public class ConfManager {
 				String k = (String) names.nextElement();
 				properties.setProperty(k, pro.getProperty(k));
 			}
+			pro = properties;
 			out = getOutputProperties(PROPERTIESNAME);
 		}
 		if (out != null) {
 			try {
 				pro.store(out, comments);
+				init();
 			} catch (IOException e) {
 				throw new ConfigException(e);
 			}
 		} else {
-			throw new ConfigException("Property file for " + key + "not found");
+			throw new ConfigException(Messages.getString(
+					"ConfManager.exception.properfies.file.notfound", key)); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 	}
@@ -164,17 +169,18 @@ public class ConfManager {
 			out = locator.getOutputStream();
 
 		} catch (IOException e) {
-			LogManager.info("Property file" + path
-					+ "No localizado en el entorno");
+			LogManager
+					.info(Messages
+							.getString(
+									"ConfManager.exception.properfies.file.notfound.classpath", path)); //$NON-NLS-1$
 			try {
 				out = new FileOutputStream(new File(ABSOLUTEDISKPATH
 						+ File.separator + path));
 			} catch (FileNotFoundException e1) {
 				LogManager
-						.error("Property file"
-								+ path
-								+ "No localizado, imposible actualizar las propiedades",
-								e1);
+						.error(Messages
+								.getString(
+										"ConfManager.exception.properfies.file.notfound.update", path), e1);//$NON-NLS-1$
 				throw new ConfigException(e1);
 			}
 

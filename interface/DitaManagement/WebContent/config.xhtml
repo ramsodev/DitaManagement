@@ -4,30 +4,39 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-
-
+<f:metadata>
+	<f:viewParam name="name" value="#{configEditorBean.key}" />
+</f:metadata>
 <ui:composition template="/WEB-INF/templates/HomeTemplate.xhtml">
 	<ui:define name="content">
-		<h:form>
-			<p:panel header="Configuration" id="configuration">
+		<h:form id="form">
+			<p:panel header="#{msg['panel.header.config']} #{configEditorBean.name}" 
+				id="configuration" >
 				<p:toolbar>
 					<f:facet name="left">
-						<p:commandButton  title="Add" actionListener="#{configEditorBean.add}"
-					update=":messages" icon="ui-icon-plus" />
-						<p:commandButton  title="Save" actionListener="#{configEditorBean.save}"
-					update=":messages" icon="ui-icon-disk" />
-						<p:commandButton  title="Delete" icon="ui-icon-trash" />
-						<p:commandButton  title="Refresh"
-							icon="ui-icon-arrowrefresh-1-w" />
+						<p:commandButton title="#{msg['toolbar.config.add']}"
+							actionListener="#{configEditorBean.add}"
+							update=":messages, form:data " icon="ui-icon-plus" />
+						<p:commandButton title="#{msg['toolbar.config.save']}"
+							actionListener="#{configEditorBean.save}" update=":messages"
+							icon="ui-icon-disk" />
+						<p:commandButton title="#{msg['toolbar.config.delete']}" icon="ui-icon-trash"
+							actionListener="#{configEditorBean.delete}"
+							update=":messages, form:data " />
+						<p:commandButton title="#{msg['toolbar.config.refresh']}" icon="ui-icon-refresh"
+							actionListener="#{configEditorBean.refresh}"
+							update=":messages, form:data " />
 					</f:facet>
 				</p:toolbar>
-				<p:dataTable id="log" var="property" value="#{configEditorBean.configs}"
-					editable="true" editMode="cell" widgetVar="cellProperty" rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15,20" >
+				<p:dataTable id="data" var="property"
+					value="#{configEditorBean.configs}" editable="true" editMode="cell"
+					widgetVar="cellProperty" rows="10" paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20" selectionMode="multiple"
+					selection="#{configEditorBean.selected}" rowKey="#{property.key}"
+					sortBy="#{property.key}" sortOrder="ascending">
 
-					<p:column headerText="Key">
+					<p:column headerText="Key" sortBy="#{property.key}">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{property.key}" />
@@ -38,7 +47,7 @@
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
-					<p:column headerText="Value">
+					<p:column headerText="Value" sortBy="#{property.value}">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{property.value}" />
@@ -50,11 +59,9 @@
 						</p:cellEditor>
 					</p:column>
 				</p:dataTable>
-				<p:commandButton actionListener="#{configEditorBean.save}"
-					update=":messages" value="Save" />
-				<p:commandButton type="reset" value="Reset" />
-
 			</p:panel>
+
+			
 		</h:form>
 
 

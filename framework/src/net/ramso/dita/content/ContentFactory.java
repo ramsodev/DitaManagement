@@ -20,6 +20,7 @@ import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.utils.Messages;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -30,13 +31,13 @@ import org.xml.sax.XMLReader;
  *
  */
 public class ContentFactory {
-	public static final String PREFIX = "content";
-	public static String projectRoot = "/project";
-	public static String templatesRoot = "/General/templates";
-	public static String componentsRoot = "/General/Componentes";
-	public static final String PROJECTLABEL = "Projects";
-	public static final String TEMPLATESLABEL = "Templates";
-	public static final String COMPONENTSLABEL = "Components";
+	public static final String PREFIX = "content"; //$NON-NLS-1$
+	public static String projectRoot = "/project"; //$NON-NLS-1$
+	public static String templatesRoot = "/General/templates"; //$NON-NLS-1$
+	public static String componentsRoot = "/General/Componentes"; //$NON-NLS-1$
+	public static final String PROJECTLABEL = Messages.getString("ContentFactory.label.project"); //$NON-NLS-1$
+	public static final String TEMPLATESLABEL = Messages.getString("ContentFactory.label.template"); //$NON-NLS-1$
+	public static final String COMPONENTSLABEL = Messages.getString("ContentFactory.label.component"); //$NON-NLS-1$
 	private IRepository repository;
 
 	/**
@@ -52,7 +53,7 @@ public class ContentFactory {
 	}
 
 	public iFolder getProject(String name) throws ContentException, RepositoryException {
-		return getRepository().getFolder(projectRoot+"/"+name);
+		return getRepository().getFolder(projectRoot+"/"+name); //$NON-NLS-1$
 
 	}
 
@@ -77,9 +78,9 @@ public class ContentFactory {
 	}
 
 	public static void config(Properties properties) {
-		projectRoot = properties.getProperty(PREFIX + ".path.projects");
-		templatesRoot = properties.getProperty(PREFIX + ".path.templates");
-		componentsRoot = properties.getProperty(PREFIX + ".path.components");
+		projectRoot = properties.getProperty(PREFIX + ".path.projects"); //$NON-NLS-1$
+		templatesRoot = properties.getProperty(PREFIX + ".path.templates"); //$NON-NLS-1$
+		componentsRoot = properties.getProperty(PREFIX + ".path.components"); //$NON-NLS-1$
 	}
 
 	public Object getDitaDocument(iFile file) throws ContentException {
@@ -87,12 +88,12 @@ public class ContentFactory {
 			// return utils.unmarshall(content);
 			byte[] content = file.getContent();
 			System.out.println(getDataType(content));
-			JAXBContext jc = JAXBContext.newInstance("net.ramso.dita.bookmap");
+			JAXBContext jc = JAXBContext.newInstance("net.ramso.dita.bookmap"); //$NON-NLS-1$
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			spf.setFeature(
-					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 					false);
-			spf.setFeature("http://xml.org/sax/features/validation", false);
+			spf.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
 			spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			XMLReader xmlReader = spf.newSAXParser().getXMLReader();
 			// XMLFilterImpl xmlFilter = new XMLNamespaceFilter(xmlReader);
@@ -116,9 +117,9 @@ public class ContentFactory {
 					.newInstance();
 			dbFactory
 					.setFeature(
-							"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+							"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 							false);
-			dbFactory.setFeature("http://xml.org/sax/features/validation",
+			dbFactory.setFeature("http://xml.org/sax/features/validation", //$NON-NLS-1$
 					false);
 			dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			DocumentBuilder dBuilder;

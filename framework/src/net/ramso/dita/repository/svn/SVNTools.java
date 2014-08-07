@@ -5,7 +5,7 @@ package net.ramso.dita.repository.svn;
 
 import java.io.ByteArrayInputStream;
 
-import net.ramso.dita.repository.ContentException;
+import net.ramso.utils.Messages;
 
 import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNException;
@@ -28,7 +28,7 @@ public class SVNTools {
 			throws SVNException {
 		l = repository.getLatestRevision();
 		if (editor == null) {
-			editor = repository.getCommitEditor("Dita Manager commit", null);
+			editor = repository.getCommitEditor(Messages.getString("SVNTools.commit.default.msg"), null); //$NON-NLS-1$
 		}
 
 		return editor;
@@ -129,11 +129,11 @@ public class SVNTools {
 	}
 
 	private static String getParentPath(String path) {
-		return path.substring(0, path.lastIndexOf("/"));
+		return path.substring(0, path.lastIndexOf("/")); //$NON-NLS-1$
 	}
 
 	private static String getName(String path) {
-		return path.substring(path.indexOf("/") + 1);
+		return path.substring(path.indexOf("/") + 1); //$NON-NLS-1$
 	}
 
 	private static int openParents(String path, int i) throws SVNException {

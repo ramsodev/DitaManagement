@@ -11,6 +11,7 @@ import net.ramso.dita.repository.AbstractFolder;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.utils.Messages;
 
 /**
  * @author ramso
@@ -58,7 +59,7 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 			folder = new File(path);
 
 			if (!folder.isDirectory()) {
-				throw new ContentException("The " + path + " is not a folder");
+				throw new ContentException(Messages.getString("FileSystemFolder.exception.msg",path)); //$NON-NLS-1$
 			}
 			if (!folder.exists()) {
 				setNew(true);

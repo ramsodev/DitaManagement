@@ -1,4 +1,4 @@
-package net.ramso.dita.jsf.utils;
+package net.ramso.dita.beans.tools;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
 import net.ramso.utils.LogManager;
+import net.ramso.utils.Messages;
 
 import org.primefaces.context.RequestContext;
 
@@ -25,6 +26,7 @@ public class LoginBean implements Serializable {
 	public void setLogeado(boolean logeado) {
 		this.logeado = logeado;
 	}
+
 	private static final long serialVersionUID = -2152389656664659476L;
 	private static final String DEFAULTTHEME = "glass-x";
 	private String nombre;
@@ -33,7 +35,7 @@ public class LoginBean implements Serializable {
 	private String theme = "glass-x";
 
 	public String getTheme() {
-		if(theme == null){
+		if (theme == null) {
 			theme = DEFAULTTHEME;
 		}
 		return theme;
@@ -69,20 +71,24 @@ public class LoginBean implements Serializable {
 		if (nombre != null && nombre.equals("admin") && clave != null
 				&& clave.equals("admin")) {
 			logeado = true;
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@",
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					Messages.getString("LoginBean.message.welcome"), //$NON-NLS-1$
 					nombre);
-			LogManager.info("Acceso del usuario " + nombre + " autorizado");
+			LogManager.info(Messages.getString(
+					"LoginBean.log.message.access", nombre)); //$NON-NLS-1$
 		} else {
 			logeado = false;
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error",
-					"Credenciales no válidas");
-			LogManager.warn("Intento de acceso erroneo para usuario " + nombre);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					Messages.getString("LoginBean.message.error"), //$NON-NLS-1$
+					Messages.getString("LoginBean.message.error.details")); //$NON-NLS-1$
+			LogManager.warn(Messages.getString(
+					"LoginBean.log.message.error", nombre)); //$NON-NLS-1$
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("estaLogeado", logeado);
 		if (logeado)
 			continuar("home.xhtml");
-//			context.addCallbackParam("view", "home.xhtml");
+		// context.addCallbackParam("view", "home.xhtml");
 	}
 
 	public void logout() {
@@ -91,18 +97,23 @@ public class LoginBean implements Serializable {
 		session.invalidate();
 		logeado = false;
 		continuar("login.xhtml");
-		LogManager.info("El usuario " + nombre + " sale de la aplicación");
+		LogManager.info(Messages.getString(
+				"LoginBean.log.message.logout", nombre)); //$NON-NLS-1$
 	}
+
 	public void continuar(String page) {
 		FacesMessage msg = null;
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		ExternalContext externalContext = FacesContext.getCurrentInstance()
+				.getExternalContext();
 		try {
 			externalContext.redirect(page);
 		} catch (IOException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error",
-					"Error al acceder a la aplicación");
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					Messages.getString("LoginBean.message.error.login"), //$NON-NLS-1$
+					Messages.getString("LoginBean.message.error.login.detail")); //$NON-NLS-1$
 			FacesContext.getCurrentInstance().addMessage(null, msg);
-			LogManager.error("Imposible acceder a la aplicación ",e);
+			LogManager.error(
+					Messages.getString("LoginBean.log.message.error.login"), e); //$NON-NLS-1$
 		}
 	}
 }

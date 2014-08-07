@@ -57,19 +57,19 @@ public class ResourcesLocator implements Serializable {
 		}
 
 		// If you get here, something went wrong. Report the exception.
-		String msg = "";
+		String msg = ""; //$NON-NLS-1$
 		if (exception != null) {
-			msg = ": " + exception;
+			msg = ": " + exception; //$NON-NLS-1$
 		}
 
 		throw new IOException(
-				"ResourceLocator '"
+				"ResourceLocator '" //$NON-NLS-1$
 						+ name
-						+ "' could not be found in "
-						+ "the CLASSPATH ("
-						+ System.getProperty("java.class.path")
-						+ "), nor could it be located by the classloader responsible for the "
-						+ "web application (WEB-INF/classes)" + msg);
+						+ "' could not be found in " //$NON-NLS-1$
+						+ "the CLASSPATH (" //$NON-NLS-1$
+						+ System.getProperty("java.class.path") //$NON-NLS-1$
+						+ "), nor could it be located by the classloader responsible for the " //$NON-NLS-1$
+						+ "web application (WEB-INF/classes)" + msg); //$NON-NLS-1$
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class ResourcesLocator implements Serializable {
 
 	// Returns true if found
 	private boolean tryClasspath(String filename) {
-		String classpath = System.getProperty("java.class.path");
+		String classpath = System.getProperty("java.class.path"); //$NON-NLS-1$
 		String[] paths = split(classpath, File.pathSeparator);
 		file = searchDirectories(paths, filename);
 		return (file != null);
@@ -144,13 +144,10 @@ public class ResourcesLocator implements Serializable {
 					return file;
 				}
 			} catch (SecurityException e) {
-				// Security exceptions can usually be ignored, but if all
-				// attempts
-				// to find the file fail, report the (last) security exception.
 				exception = e;
 			}
 		}
-		// Couldn't find any match
+		
 		if (exception != null) {
 			throw exception;
 		} else {
@@ -158,33 +155,25 @@ public class ResourcesLocator implements Serializable {
 		}
 	}
 
-	// Splits a String into pieces according to a delimiter.
-	// Uses JDK 1.1 classes for backward compatibility.
-	// JDK 1.4 actually has a split( ) method now.
+	
 	private static String[] split(String str, String delim) {
-		// Use a Vector to hold the split strings.
 		Vector<String> v = new Vector<String>();
-
-		// Use a StringTokenizer to do the splitting.
 		StringTokenizer tokenizer = new StringTokenizer(str, delim);
 		while (tokenizer.hasMoreTokens()) {
 			v.addElement(tokenizer.nextToken());
 		}
-
 		String[] ret = new String[v.size()];
 		v.copyInto(ret);
 		return ret;
 	}
 
-	// Returns true if found
+	
 	private boolean tryLoader(String name) {
-		name = "/" + name;
+		name = "/" + name; //$NON-NLS-1$
 		URL res = ResourcesLocator.class.getResource(name);
 		if (res == null) {
 			return false;
 		}
-
-		// Try converting from a URL to a File.
 		File resFile = urlToFile(res);
 		if (resFile != null) {
 			file = resFile;
@@ -196,14 +185,14 @@ public class ResourcesLocator implements Serializable {
 
 	private static File urlToFile(URL res) {
 		String externalForm = res.toExternalForm();
-		if (externalForm.startsWith("file:")) {
+		if (externalForm.startsWith("file:")) { //$NON-NLS-1$
 			return new File(externalForm.substring(5));
 		}
 		return null;
 	}
 
 	public String toString() {
-		return "[ResourceLocator: File: " + file + " URL: " + url + "]";
+		return "[ResourceLocator: File: " + file + " URL: " + url + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public OutputStream getOutputStream() throws FileNotFoundException {

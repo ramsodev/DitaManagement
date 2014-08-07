@@ -12,6 +12,7 @@ import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.utils.Messages;
 
 import org.apache.commons.collections.functors.StringValueTransformer;
 import org.tmatesoft.svn.core.SVNException;
@@ -61,13 +62,13 @@ public class RepositorySVN implements IRepository {
 		DAVRepositoryFactory.setup();
 		SVNRepositoryFactoryImpl.setup();
 		FSRepositoryFactory.setup();
-		String protocol = properties.getProperty("svn.protocol");
-		String host = properties.getProperty("svn.host");
-		int port = new Integer(properties.getProperty("svn.port", "3690"))
+		String protocol = properties.getProperty("svn.protocol"); //$NON-NLS-1$
+		String host = properties.getProperty("svn.host"); //$NON-NLS-1$
+		int port = new Integer(properties.getProperty("svn.port", "3690")) //$NON-NLS-1$ //$NON-NLS-2$
 				.intValue();
-		String path = properties.getProperty("svn.path");
-		String user = properties.getProperty("svn.user");
-		String password = properties.getProperty("svn.password");
+		String path = properties.getProperty("svn.path"); //$NON-NLS-1$
+		String user = properties.getProperty("svn.user"); //$NON-NLS-1$
+		String password = properties.getProperty("svn.password"); //$NON-NLS-1$
 		try {
 			url = SVNURL.create(protocol, null, host, port, path, false);
 			authManager = SVNWCUtil.createDefaultAuthenticationManager(user,
@@ -120,7 +121,7 @@ public class RepositorySVN implements IRepository {
 	@Override
 	public iContent getRoot() throws ContentException {
 		if (root == null) {
-			root = getFolder("");
+			root = getFolder(""); //$NON-NLS-1$
 		}
 		return root;
 	}
@@ -139,8 +140,8 @@ public class RepositorySVN implements IRepository {
 			if (nodeKind == SVNNodeKind.NONE) {
 				create = true;
 			} else if (nodeKind == SVNNodeKind.FILE) {
-				throw new ContentException("The entry at '" + url
-						+ "' is a file while a directory was expected.");
+				throw new ContentException(Messages.getString(
+						"RepositorySVN.exception.msg", url)); //$NON-NLS-1$
 			}
 		} catch (SVNException e) {
 			throw new ContentException(e);
@@ -157,11 +158,11 @@ public class RepositorySVN implements IRepository {
 	}
 
 	private static String getParentPath(String path) {
-		return path.substring(0, path.lastIndexOf("/"));
+		return path.substring(0, path.lastIndexOf("/")); //$NON-NLS-1$
 	}
 
 	private static String getName(String path) {
-		return path.substring(path.lastIndexOf("/"));
+		return path.substring(path.lastIndexOf("/")); //$NON-NLS-1$
 	}
 
 	/*
@@ -200,8 +201,8 @@ public class RepositorySVN implements IRepository {
 			if (nodeKind == SVNNodeKind.NONE) {
 				create = true;
 			} else if (nodeKind == SVNNodeKind.DIR) {
-				throw new ContentException("The entry at '" + url
-						+ "' is a file while a directory was expected.");
+				throw new ContentException(
+						Messages.getString("RepositorySVN.exception.msg", url)); //$NON-NLS-1$
 			}
 		} catch (SVNException e) {
 			throw new ContentException(e);
@@ -212,7 +213,7 @@ public class RepositorySVN implements IRepository {
 	}
 
 	public iFolder getParent(String path) throws ContentException {
-		String parent = path.substring(0, path.lastIndexOf("/"));
+		String parent = path.substring(0, path.lastIndexOf("/")); //$NON-NLS-1$
 		if (parent.trim().isEmpty()) {
 			return (iFolder) getRoot();
 		}
@@ -223,16 +224,16 @@ public class RepositorySVN implements IRepository {
 		try {
 			if (!SVNTools.exist(repository, child.getPath())) {
 				String parent = child.getPath().substring(0,
-						child.getPath().lastIndexOf("/"));
-				int idx = parent.indexOf("/");
+						child.getPath().lastIndexOf("/")); //$NON-NLS-1$
+				int idx = parent.indexOf("/"); //$NON-NLS-1$
 				iContent content = getRoot();
 				while (true) {
-					int idx2 = parent.indexOf("/", idx + 1);
+					int idx2 = parent.indexOf("/", idx + 1); //$NON-NLS-1$
 					if (idx2 == -1) {
 						idx2 = parent.length();
 					}
 					String element = parent.substring(0, idx2);
-					idx = parent.indexOf("/", idx + 1);
+					idx = parent.indexOf("/", idx + 1); //$NON-NLS-1$
 					add = true;
 					iContent c = getContent(content, element);
 					if (add) {
@@ -251,7 +252,7 @@ public class RepositorySVN implements IRepository {
 
 	private iContent getContent(iContent content, String path)
 			throws ContentException {
-		
+
 		ArrayList<iContent> cs = content.getChilds();
 		for (iContent c : cs) {
 			if (c.getPath().equals(path)) {

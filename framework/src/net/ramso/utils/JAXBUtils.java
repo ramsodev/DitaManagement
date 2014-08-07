@@ -37,7 +37,7 @@ public class JAXBUtils {
 		try {
 			jaxbContext = JAXBContext.newInstance(pkgs);
 		} catch (Exception ex) {
-			logger.error("Failed to create JAXBContext", ex);
+			logger.error(Messages.getString("JAXBUtils.error.msg"), ex); //$NON-NLS-1$
 		}
 	}
 

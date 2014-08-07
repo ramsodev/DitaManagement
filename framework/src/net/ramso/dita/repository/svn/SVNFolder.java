@@ -113,10 +113,10 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 				entries = repository.getDir(getPath(), -1, null, (Collection) null);
 				for (SVNDirEntry entry : entries) {
 					if (entry.getKind() == SVNNodeKind.DIR) {
-						childs.add(new SVNFolder(repository, getPath() + "/"
+						childs.add(new SVNFolder(repository, getPath() + "/" //$NON-NLS-1$
 								+ entry.getRelativePath()));
 					} else if (entry.getKind() == SVNNodeKind.FILE) {
-						childs.add(new SVNFile(repository, getPath() + "/"
+						childs.add(new SVNFile(repository, getPath() + "/" //$NON-NLS-1$
 								+ entry.getRelativePath()));
 					}
 				}

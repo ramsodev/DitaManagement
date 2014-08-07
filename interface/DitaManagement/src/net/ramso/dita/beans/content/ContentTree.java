@@ -1,4 +1,4 @@
-package net.ramso.dita.jsf.content;
+package net.ramso.dita.beans.content;
 
 import java.util.ArrayList;
 
@@ -11,16 +11,17 @@ import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
 import net.ramso.utils.LogManager;
+import net.ramso.utils.Messages;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean
-
 public class ContentTree {
 
 	private String name;
 	private TreeNode root;
+	private TreeNode[] selected;
 
 	public ContentTree(String name) {
 		this.name = name;
@@ -33,23 +34,26 @@ public class ContentTree {
 		try {
 			if (name.equals(ContentFactory.PROJECTLABEL)) {
 				iFolder ps = cf.getProjects();
-				root = new DefaultTreeNode(ps.getPath());
+				root = new DefaultTreeNode(new ContentItem(ps), null);
 				addchilds(root, ps.getChilds());
 			} else if (name.equals(ContentFactory.TEMPLATESLABEL)) {
 				iFolder ps = cf.getTemplates();
-				root = new DefaultTreeNode(ps.getPath());
+				root = new DefaultTreeNode(new ContentItem(ps), null);
 				addchilds(root, ps.getChilds());
 			} else if (name.equals(ContentFactory.COMPONENTSLABEL)) {
 				iFolder ps = cf.getComponents();
-				root = new DefaultTreeNode(ps.getPath());
+				root = new DefaultTreeNode(new ContentItem(ps), null);
 				addchilds(root, ps.getChilds());
-			}else{
-				root = new DefaultTreeNode("Vacio");
+			} else {
+				root = new DefaultTreeNode(
+						Messages.getString("ContentTree.null.node")); //$NON-NLS-1$
 			}
 		} catch (ContentException e) {
-			LogManager.error("Error al crear los arboles de contenido", e);
+			LogManager.error(
+					Messages.getString("ContentTree.content.exception"), e); //$NON-NLS-1$
 		} catch (RepositoryException e) {
-			LogManager.error("Error al crear los arboles de contenido", e);
+			LogManager.error(
+					Messages.getString("ContentTree.content.exception"), e); //$NON-NLS-1$
 		}
 	}
 
@@ -57,7 +61,13 @@ public class ContentTree {
 			throws ContentException {
 		if (childs != null) {
 			for (iContent child : childs) {
-				TreeNode node = new DefaultTreeNode(child.getPath(), parent);
+				ContentItem item = new ContentItem(child);
+				TreeNode node = null;
+				if (!item.getType().equals("folder")) {
+					node = new DefaultTreeNode(item.getType(), item, parent);
+				}else{
+					node = new DefaultTreeNode(item, parent);
+				}
 				addchilds(node, child.getChilds());
 			}
 		}
@@ -70,6 +80,24 @@ public class ContentTree {
 
 	public String getName() {
 		return name;
+	}
+
+	public TreeNode[] getSelected() {
+		return selected;
+	}
+
+	public void setSelected(TreeNode[] selected) {
+		this.selected = selected;
+	}
+	
+	public void add(){
+		
+	}
+	public void delete(){
+		
+	}
+	public void refresh(){
+		
 	}
 
 }

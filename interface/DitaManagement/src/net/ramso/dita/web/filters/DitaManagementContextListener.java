@@ -1,7 +1,6 @@
 package net.ramso.dita.web.filters;
 
 
-import java.io.File;
 import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;

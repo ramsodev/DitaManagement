@@ -5,4 +5,4 @@
  * @author ramso
  *
  */
-package net.ramso.dita.jsf.content;
+package net.ramso.dita.beans.content;

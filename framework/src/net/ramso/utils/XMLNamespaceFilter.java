@@ -13,7 +13,7 @@ public class XMLNamespaceFilter extends XMLFilterImpl {
     public void startElement(String uri, String localName,
                              String qName, Attributes attributes)
                              throws SAXException {
-       super.startElement("", localName, qName, 
+       super.startElement("", localName, qName,  //$NON-NLS-1$
                           attributes);
     }
 }

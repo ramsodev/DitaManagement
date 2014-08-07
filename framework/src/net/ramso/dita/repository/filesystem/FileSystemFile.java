@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import net.ramso.dita.repository.AbstractFile;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iFile;
+import net.ramso.utils.Messages;
 
 /**
  * @author ramso
@@ -55,7 +56,7 @@ public class FileSystemFile extends AbstractFile implements iFile {
 			file = new File(path);
 
 			if (!file.isFile()) {
-				throw new ContentException("The " + path + " is not a file");
+				throw new ContentException(Messages.getString("FileSystemFile.exception.msg", path) ); //$NON-NLS-1$
 			}
 			if(!file.exists()){
 				setNew(true);

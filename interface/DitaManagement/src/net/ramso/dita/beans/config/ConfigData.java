@@ -1,4 +1,4 @@
-package net.ramso.dita.jsf.utils;
+package net.ramso.dita.beans.config;
 
 import java.io.Serializable;
 

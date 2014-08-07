@@ -8,7 +8,7 @@ package net.ramso.utils;
  *
  */
 public enum TypesOfDocuments {
-	BOOKMAP ("bookmap", "net.ramso.dita.bookmap");
+	BOOKMAP ("bookmap", "net.ramso.dita.bookmap"); //$NON-NLS-1$ //$NON-NLS-2$
 	private String name;
 	private String pkg;
 

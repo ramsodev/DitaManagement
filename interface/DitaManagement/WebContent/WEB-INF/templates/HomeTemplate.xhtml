@@ -6,7 +6,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title><ui:insert name="title">DITA Management</ui:insert></title>
+	<title><ui:insert name="title">
+			<h:outputText value="#{msg['application.default.title']}" />
+		</ui:insert></title>
 
 	<h:outputStylesheet library="css" name="grid.css" />
 	<h:outputStylesheet library="css" name="custom.css" />
@@ -29,11 +31,36 @@
 				<h:form>
 					<p:accordionPanel value="#{contentAccordion.contentTrees}"
 						var="group" styleClass="panel">
-						<p:tab title="#{group.name}">
-							<p:tree value="#{group.root}" var="node" dynamic="true">
-								<p:treeNode>
-									<h:outputText value="#{node}" />
+						<p:tab title="#{group.name}" >
+							<p:toolbar>
+								<f:facet name="left">
+									<p:commandButton title="#{msg['toolbar.config.add']}"
+										actionListener="#{group.add}"
+										update=":messages" icon="ui-icon-plus" />
+									
+									<p:commandButton title="#{msg['toolbar.config.delete']}"
+										icon="ui-icon-trash"
+										actionListener="#{group.delete}"
+										update=":messages" />
+									<p:commandButton title="#{msg['toolbar.config.refresh']}"
+										icon="ui-icon-refresh"
+										actionListener="#{group.refresh}"
+										update=":messages" />
+								</f:facet>
+							</p:toolbar>
+							<p:tree value="#{group.root}" var="node" selectionMode="multiple"
+								selection="#{group.selected}" style="width:100%">
+								<p:treeNode expandedIcon="#{node.iconOpen}"
+									collapsedIcon="#{node.iconClose}">
+									<h:outputText value="#{node.name}" />
 								</p:treeNode>
+								<p:treeNode type="document" icon="#{node.icon}">
+									<h:outputText value="#{node.name}" />
+								</p:treeNode>
+								<p:treeNode type="resource" icon="#{node.icon}">
+									<h:outputText value="#{node.name}" />
+								</p:treeNode>
+
 							</p:tree>
 						</p:tab>
 					</p:accordionPanel>

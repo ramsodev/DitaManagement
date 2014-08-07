@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import net.ramso.dita.repository.AbstractFile;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iFile;
+import net.ramso.utils.Messages;
 
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -54,16 +55,17 @@ public class SVNFile extends AbstractFile implements iFile {
 		try {
 			if (isNew()) {
 				SVNTools.newFile(repository, getPath(), getContent());
-			}else if(isModify()){
-				SVNTools.updateFile(repository, getPath(), getContent(), getOldcontent());
-			}else if(isDelete()){
+			} else if (isModify()) {
+				SVNTools.updateFile(repository, getPath(), getContent(),
+						getOldcontent());
+			} else if (isDelete()) {
 				SVNTools.delete(repository, getPath());
-			}else if(isRename()){
+			} else if (isRename()) {
 				SVNTools.newFile(repository, getRename(), getContent());
 				SVNTools.delete(repository, getPath());
 				setPath(getRename());
 			}
-			
+
 		} catch (SVNException e) {
 			throw new ContentException(e);
 		}
@@ -77,14 +79,13 @@ public class SVNFile extends AbstractFile implements iFile {
 	 */
 	@Override
 	public void update() throws ContentException {
-		content=null;
-		oldcontent=null;
+		content = null;
+		oldcontent = null;
 		setNew(false);
 		rename(null);
 		setModify(false);
 		setDelete(false);
 		getContent();
-		
 
 	}
 
@@ -101,19 +102,16 @@ public class SVNFile extends AbstractFile implements iFile {
 			try {
 				SVNNodeKind nodeKind = repository.checkPath(getPath(), -1);
 				if (nodeKind == SVNNodeKind.NONE) {
-					System.err.println("There is no entry at '" + getPath()
-							+ "'.");
-					System.exit(1);
+					throw new ContentException(Messages.getString(
+							"SVNFile.exception.notfound", getPath())); //$NON-NLS-1$
 				} else if (nodeKind == SVNNodeKind.DIR) {
-					System.err.println("The entry at '" + getPath()
-							+ "' is a directory while a file was expected.");
-					System.exit(1);
+					throw new ContentException(Messages.getString(
+							"SVNFile.exception.notfile", getPath())); //$NON-NLS-1$						
 				}
 				repository.getFile(getPath(), -1, fileProperties, baos);
 			} catch (SVNException svne) {
-				throw new ContentException(
-						"error while fetching the file contents and properties: "
-								+ svne.getMessage());
+				throw new ContentException(Messages.getString(
+						"SVNFile.exception.msg", svne.getMessage()));//$NON-NLS-1$
 			}
 			content = baos.toByteArray();
 		}
@@ -128,13 +126,14 @@ public class SVNFile extends AbstractFile implements iFile {
 	@Override
 	public void setContent(byte[] content) throws ContentException {
 		this.oldcontent = getContent();
-		setModify(getOldcontent()!=null);		
+		setModify(getOldcontent() != null);
 		this.content = content;
 	}
 
 	private byte[] getOldcontent() {
 		return oldcontent;
 	}
+
 	@Override
 	public String toString() {
 		return getPath();
