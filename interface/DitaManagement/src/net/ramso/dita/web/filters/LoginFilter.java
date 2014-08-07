@@ -47,7 +47,6 @@ public class LoginFilter implements Filter {
 
 		String urlStr = req.getRequestURL().toString().toLowerCase();
 		boolean noProteger = noProteger(urlStr);
-		System.out.println(urlStr + " - desprotegido=[" + noProteger + "]");
 
 		if (noProteger(urlStr)) {
 			chain.doFilter(request, response);

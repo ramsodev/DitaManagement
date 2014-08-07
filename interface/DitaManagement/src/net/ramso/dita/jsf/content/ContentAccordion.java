@@ -1,4 +1,4 @@
-package net.ramso.dita.jsf.components;
+package net.ramso.dita.jsf.content;
 
 import java.util.ArrayList;
 import java.util.List;

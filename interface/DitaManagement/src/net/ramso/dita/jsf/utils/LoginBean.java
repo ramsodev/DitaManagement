@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
+import net.ramso.utils.LogManager;
+
 import org.primefaces.context.RequestContext;
 
 @ManagedBean
@@ -24,7 +26,7 @@ public class LoginBean implements Serializable {
 		this.logeado = logeado;
 	}
 	private static final long serialVersionUID = -2152389656664659476L;
-	private static final String DEFAULTTHEME = "bluesky";
+	private static final String DEFAULTTHEME = "glass-x";
 	private String nombre;
 	private String clave;
 	private boolean logeado = false;
@@ -34,7 +36,6 @@ public class LoginBean implements Serializable {
 		if(theme == null){
 			theme = DEFAULTTHEME;
 		}
-		System.out.println("theme:" + theme);
 		return theme;
 	}
 
@@ -70,10 +71,12 @@ public class LoginBean implements Serializable {
 			logeado = true;
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@",
 					nombre);
+			LogManager.info("Acceso del usuario " + nombre + " autorizado");
 		} else {
 			logeado = false;
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error",
 					"Credenciales no válidas");
+			LogManager.warn("Intento de acceso erroneo para usuario " + nombre);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("estaLogeado", logeado);
@@ -88,6 +91,7 @@ public class LoginBean implements Serializable {
 		session.invalidate();
 		logeado = false;
 		continuar("login.xhtml");
+		LogManager.info("El usuario " + nombre + " sale de la aplicación");
 	}
 	public void continuar(String page) {
 		FacesMessage msg = null;
@@ -98,6 +102,7 @@ public class LoginBean implements Serializable {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error",
 					"Error al acceder a la aplicación");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
+			LogManager.error("Imposible acceder a la aplicación ",e);
 		}
 	}
 }

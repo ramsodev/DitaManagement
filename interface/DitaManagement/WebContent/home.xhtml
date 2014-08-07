@@ -6,28 +6,15 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-<ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
+<ui:composition template="/WEB-INF/templates/HomeTemplate.xhtml">
 	<ui:define name="content">
 
-		<div class="ui-grid-col-4">
-			<h:form>
-				<p:accordionPanel value="#{contentAccordion.contentTrees}" var="group">
-					<p:tab title="#{group.name}">
-						<p:tree value="#{group.root}" var="node" dynamic="true">
-							<p:treeNode>
-								<h:outputText value="#{node}" />
-							</p:treeNode>
-						</p:tree>
-					</p:tab>
-				</p:accordionPanel>
-			</h:form>
-		</div>
-		<div class="ui-grid-col-8">
-			<h:form>
-				<p:panel header="editor">
-				</p:panel>
-			</h:form>
-		</div>
+
+		<h:form>
+			<p:panel header="editor">
+			</p:panel>
+		</h:form>
+
 
 	</ui:define>
 </ui:composition>

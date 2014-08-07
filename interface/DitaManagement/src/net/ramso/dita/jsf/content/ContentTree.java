@@ -1,4 +1,4 @@
-package net.ramso.dita.jsf.components;
+package net.ramso.dita.jsf.content;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,7 @@ import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.utils.LogManager;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -30,7 +31,6 @@ public class ContentTree {
 	public void init() {
 		ContentFactory cf = new ContentFactory();
 		try {
-			System.out.println(name);
 			if (name.equals(ContentFactory.PROJECTLABEL)) {
 				iFolder ps = cf.getProjects();
 				root = new DefaultTreeNode(ps.getPath());
@@ -47,9 +47,9 @@ public class ContentTree {
 				root = new DefaultTreeNode("Vacio");
 			}
 		} catch (ContentException e) {
-			e.printStackTrace();
+			LogManager.error("Error al crear los arboles de contenido", e);
 		} catch (RepositoryException e) {
-			e.printStackTrace();
+			LogManager.error("Error al crear los arboles de contenido", e);
 		}
 	}
 
@@ -65,7 +65,6 @@ public class ContentTree {
 	}
 
 	public TreeNode getRoot() {
-		System.out.println(root.getChildCount());
 		return root;
 	}
 
