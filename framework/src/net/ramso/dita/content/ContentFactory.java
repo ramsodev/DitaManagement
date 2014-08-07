@@ -4,7 +4,6 @@
 package net.ramso.dita.content;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 import javax.xml.XMLConstants;
@@ -12,7 +11,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 
@@ -22,11 +20,9 @@ import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
-import net.ramso.utils.TypesOfDocuments;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
@@ -38,6 +34,9 @@ public class ContentFactory {
 	public static String projectRoot = "/project";
 	public static String templatesRoot = "/General/templates";
 	public static String componentsRoot = "/General/Componentes";
+	public static final String PROJECTLABEL = "Projects";
+	public static final String TEMPLATESLABEL = "Templates";
+	public static final String COMPONENTSLABEL = "Components";
 	private IRepository repository;
 
 	/**

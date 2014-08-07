@@ -11,18 +11,30 @@
 		<div class="ui-grid-col-4"></div>
 		<div class="ui-grid-col-4">
 			<h:form>
-				<p:panel header="Login" style="position:fixed;top:35%">
-					<h:panelGrid columns="2" cellpadding="5" >
-						<h:outputLabel for="username" value="Usuario:" />
-						<p:inputText value="#{loginBean.nombre}" id="username"
-							required="true" label="username" />
-						<h:outputLabel for="password" value="Clave:" />
-						<p:password value="#{loginBean.clave}" id="password"
-							required="true" label="password" />
-						<f:facet name="footer">
+				<p:panel header="Login" style="position:fixed;top:35%;width:33.3%">
+					<h:panelGrid  style="width:100%" cellspacing="5px" >
+						<p:row >
+							<p:column  style="text-align:center;width=50%">
+								<h:outputLabel for="username" value="Usuario:" />
+							</p:column>
+							<p:column style="text-align:center;width=50%">
+								<p:inputText value="#{loginBean.nombre}" id="username"
+									required="true" label="username" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column   style="text-align:center;width=50%">
+								<h:outputLabel for="password" value="Clave:" />
+							</p:column>
+							<p:column style="text-align:center;width=50%">
+								<p:password value="#{loginBean.clave}" id="password"
+									required="true" label="password" />
+							</p:column>
+						</p:row>
+						<p:row>
 							<p:commandButton id="loginButton" value="Login"
 								actionListener="#{loginBean.login}" update=":mensajes" />
-						</f:facet>
+						</p:row>
 					</h:panelGrid>
 				</p:panel>
 
