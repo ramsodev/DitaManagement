@@ -1,0 +1,64 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition template="/WEB-INF/templates/HomeTemplate.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<p:panel header="Configuration" id="configuration">
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton  title="Add" actionListener="#{configEditorBean.add}"
+					update=":messages" icon="ui-icon-plus" />
+						<p:commandButton  title="Save" actionListener="#{configEditorBean.save}"
+					update=":messages" icon="ui-icon-disk" />
+						<p:commandButton  title="Delete" icon="ui-icon-trash" />
+						<p:commandButton  title="Refresh"
+							icon="ui-icon-arrowrefresh-1-w" />
+					</f:facet>
+				</p:toolbar>
+				<p:dataTable id="log" var="property" value="#{configEditorBean.configs}"
+					editable="true" editMode="cell" widgetVar="cellProperty" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,20" >
+
+					<p:column headerText="Key">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{property.key}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="keyInput" value="#{property.key}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Value">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{property.value}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="valueInput" value="#{property.value}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+				</p:dataTable>
+				<p:commandButton actionListener="#{configEditorBean.save}"
+					update=":messages" value="Save" />
+				<p:commandButton type="reset" value="Reset" />
+
+			</p:panel>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

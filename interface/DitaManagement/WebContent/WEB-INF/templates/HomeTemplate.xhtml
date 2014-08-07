@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">DITA Management</ui:insert></title>
+
+	<h:outputStylesheet library="css" name="grid.css" />
+	<h:outputStylesheet library="css" name="custom.css" />
+</h:head>
+
+<h:body style="text-align:center">
+	<ui:debug hotkey="x"
+		rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
+
+	<div class="ui-grid ui-grid-responsive">
+
+
+		<ui:insert name="header">
+			<ui:include src="/WEB-INF/templates/header.xhtml" />
+		</ui:insert>
+
+
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-4">
+				<h:form>
+					<p:accordionPanel value="#{contentAccordion.contentTrees}"
+						var="group" styleClass="panel">
+						<p:tab title="#{group.name}">
+							<p:tree value="#{group.root}" var="node" dynamic="true">
+								<p:treeNode>
+									<h:outputText value="#{node}" />
+								</p:treeNode>
+							</p:tree>
+						</p:tab>
+					</p:accordionPanel>
+				</h:form>
+			</div>
+			<div class="ui-grid-col-8">
+				<ui:insert name="content">
+				</ui:insert>
+			</div>
+		</div>
+
+		<div class="ui-grid-row">
+			<ui:insert name="footer">
+				<ui:include src="/WEB-INF/templates/footer.xhtml" />
+			</ui:insert>
+		</div>
+	</div>
+
+</h:body>
+
+</html>

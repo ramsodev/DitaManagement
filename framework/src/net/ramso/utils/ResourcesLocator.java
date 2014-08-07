@@ -1,9 +1,19 @@
 package net.ramso.utils;
 
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.net.URL;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * A class to locate resources, retrieve their contents, and determine their
@@ -194,5 +204,12 @@ public class ResourcesLocator implements Serializable {
 
 	public String toString() {
 		return "[ResourceLocator: File: " + file + " URL: " + url + "]";
+	}
+
+	public OutputStream getOutputStream() throws FileNotFoundException {
+		if (file != null) {
+			return new  FileOutputStream(file);
+		} 
+		return null;
 	}
 }

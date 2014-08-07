@@ -1,23 +1,12 @@
 package net.ramso.utils;
 
-import java.util.ArrayList;
 import java.util.Properties;
-
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import net.ramso.dita.content.ContentFactory;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
-import net.ramso.dita.repository.iContent;
-import net.ramso.dita.repository.iFile;
-import net.ramso.dita.repository.iFolder;
-import net.ramso.dita.repository.svn.RepositorySVN;
-import net.ramso.dita.repository.svn.SVNFile;
-import net.ramso.dita.repository.svn.SVNFolder;
-import net.ramso.dita.repository.svn.SVNTools;
 
 public class ApplicationConfiguration {
 

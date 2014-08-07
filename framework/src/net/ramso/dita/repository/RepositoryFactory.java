@@ -6,12 +6,14 @@ package net.ramso.dita.repository;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+import net.ramso.utils.ConfManager;
+
 /**
  * @author ramso
  *
  */
 public class RepositoryFactory {
-	public static final String PREFIX = "repository";
+	public static final String PREFIX = ConfManager.FILEPREFIX +"repository";
 	private static Properties properties = new Properties();
 
 	/**
