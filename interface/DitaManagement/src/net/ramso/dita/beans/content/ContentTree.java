@@ -1,9 +1,11 @@
 package net.ramso.dita.beans.content;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import net.ramso.dita.content.ContentFactory;
 import net.ramso.dita.repository.ContentException;
@@ -13,41 +15,41 @@ import net.ramso.dita.repository.iFolder;
 import net.ramso.utils.LogManager;
 import net.ramso.utils.Messages;
 
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean
-public class ContentTree {
+@ViewScoped
+public class ContentTree implements Serializable{
 
-	private String name;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private TreeNode root;
-	private TreeNode[] selected;
+	private TreeNode selected;
 
-	public ContentTree(String name) {
-		this.name = name;
-		init();
-	}
+
 
 	@PostConstruct
 	public void init() {
 		ContentFactory cf = new ContentFactory();
 		try {
-			if (name.equals(ContentFactory.PROJECTLABEL)) {
-				iFolder ps = cf.getProjects();
-				root = new DefaultTreeNode(new ContentItem(ps), null);
-				addchilds(root, ps.getChilds());
-			} else if (name.equals(ContentFactory.TEMPLATESLABEL)) {
-				iFolder ps = cf.getTemplates();
-				root = new DefaultTreeNode(new ContentItem(ps), null);
-				addchilds(root, ps.getChilds());
-			} else if (name.equals(ContentFactory.COMPONENTSLABEL)) {
-				iFolder ps = cf.getComponents();
-				root = new DefaultTreeNode(new ContentItem(ps), null);
-				addchilds(root, ps.getChilds());
-			} else {
-				root = new DefaultTreeNode(
-						Messages.getString("ContentTree.null.node")); //$NON-NLS-1$
-			}
+			root = new DefaultTreeNode("/", null);
+			iFolder ps = cf.getProjects();
+			DefaultTreeNode node = new DefaultTreeNode(new ContentItem(ps), root);
+			selected=node;
+			addchilds(node, ps.getChilds());
+			 ps = cf.getTemplates();
+			 node = new DefaultTreeNode(new ContentItem(ps), root);
+			addchilds(node, ps.getChilds());
+			ps = cf.getComponents();
+			 node = new DefaultTreeNode(new ContentItem(ps), root);
+			addchilds(node, ps.getChilds());
+			
+
 		} catch (ContentException e) {
 			LogManager.error(
 					Messages.getString("ContentTree.content.exception"), e); //$NON-NLS-1$
@@ -78,19 +80,18 @@ public class ContentTree {
 		return root;
 	}
 
-	public String getName() {
-		return name;
-	}
+	
 
-	public TreeNode[] getSelected() {
+	public TreeNode getSelected() {
 		return selected;
 	}
 
-	public void setSelected(TreeNode[] selected) {
+	public void setSelected(TreeNode selected) {
 		this.selected = selected;
 	}
 	
 	public void add(){
+		
 		
 	}
 	public void delete(){
@@ -98,6 +99,11 @@ public class ContentTree {
 	}
 	public void refresh(){
 		
+	}
+	
+	public void onSelect(NodeSelectEvent event){
+		System.out.println("Selected event:" + event.getTreeNode().getType());
+		System.out.println(selected);
 	}
 
 }

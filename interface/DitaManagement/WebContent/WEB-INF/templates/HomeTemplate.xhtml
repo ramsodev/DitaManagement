@@ -26,44 +26,46 @@
 		</ui:insert>
 
 
-		<div class="ui-grid-row">
+		<div class="ui-grid-row ">
 			<div class="ui-grid-col-4">
 				<h:form>
-					<p:accordionPanel value="#{contentAccordion.contentTrees}"
-						var="group" styleClass="panel">
-						<p:tab title="#{group.name}" >
-							<p:toolbar>
-								<f:facet name="left">
-									<p:commandButton title="#{msg['toolbar.config.add']}"
-										actionListener="#{group.add}"
-										update=":messages" icon="ui-icon-plus" />
-									
-									<p:commandButton title="#{msg['toolbar.config.delete']}"
-										icon="ui-icon-trash"
-										actionListener="#{group.delete}"
-										update=":messages" />
-									<p:commandButton title="#{msg['toolbar.config.refresh']}"
-										icon="ui-icon-refresh"
-										actionListener="#{group.refresh}"
-										update=":messages" />
-								</f:facet>
-							</p:toolbar>
-							<p:tree value="#{group.root}" var="node" selectionMode="multiple"
-								selection="#{group.selected}" style="width:100%">
-								<p:treeNode expandedIcon="#{node.iconOpen}"
-									collapsedIcon="#{node.iconClose}">
-									<h:outputText value="#{node.name}" />
-								</p:treeNode>
-								<p:treeNode type="document" icon="#{node.icon}">
-									<h:outputText value="#{node.name}" />
-								</p:treeNode>
-								<p:treeNode type="resource" icon="#{node.icon}">
-									<h:outputText value="#{node.name}" />
-								</p:treeNode>
+					<p:panel header="Content" >
 
-							</p:tree>
-						</p:tab>
-					</p:accordionPanel>
+						<p:toolbar>
+							<f:facet name="left">
+								<p:commandButton title="#{msg['toolbar.config.add']}"
+									actionListener="#{homeBean.add}" partialSubmit="true"
+									update=":messages :formE" icon="ui-icon-plus">
+									<f:setPropertyActionListener target="#{homeBean.content}"
+										value="#{contentTree.selected}" />
+								</p:commandButton>
+
+								<p:commandButton title="#{msg['toolbar.config.delete']}"
+									icon="ui-icon-trash" actionListener="#{contentTree.delete}"
+									update=":messages" />
+								<p:commandButton title="#{msg['toolbar.config.refresh']}"
+									icon="ui-icon-refresh" actionListener="#{contentTree.refresh}"
+									update=":messages" />
+							</f:facet>
+						</p:toolbar>
+						<p:tree value="#{contentTree.root}" var="node" style="width:100%"
+							selectionMode="single" selection="#{contentTree.selected}">
+							<p:ajax event="select" listener="#{contentTree.onSelect}" />
+
+							<p:treeNode expandedIcon="#{node.iconOpen}"
+								collapsedIcon="#{node.iconClose}">
+								<h:outputText value="#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="document" icon="#{node.icon}">
+								<h:outputText value="#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="resource" icon="#{node.icon}">
+								<h:outputText value="#{node.name}" />
+							</p:treeNode>
+
+						</p:tree>
+
+					</p:panel>
 				</h:form>
 			</div>
 			<div class="ui-grid-col-8">
