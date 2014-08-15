@@ -55,8 +55,11 @@ public class ContentSearchQuery {
 		}
 
 	}
-
 	public ScoreDoc[] findFromAll(String text) throws IndexException {
+		return findFromAll(text, 100);
+	}
+
+	public ScoreDoc[] findFromAll(String text, int number) throws IndexException {
 		ScoreDoc[] hits = null;
 		try {
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(
@@ -64,7 +67,7 @@ public class ContentSearchQuery {
 							"content", Metadata.CONTENT_TYPE, "Dita Type" },
 					new StandardAnalyzer(Version.LUCENE_4_9));
 			Query query = queryParser.parse(text);			
-			hits = getSearcher().search(query, 25).scoreDocs;
+			hits = getSearcher().search(query, number).scoreDocs;
 		} catch (ParseException e) {
 			throw new IndexException("Fail queryng", e);
 		} catch (IOException e) {

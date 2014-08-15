@@ -5,9 +5,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
+<f:facet name="header">
+<p:outputLabel value="#{msg['panel.header.config']} #{configEditorBean.name}"></p:outputLabel>
+</f:facet>
 
-<p:panel header="#{msg['panel.header.config']} #{configEditorBean.name}"
-	id="configuration">
 	<p:toolbar>
 		<f:facet name="left">
 			<p:commandButton title="#{msg['toolbar.config.add']}"
@@ -55,6 +56,6 @@
 			</p:cellEditor>
 		</p:column>
 	</p:dataTable>
-</p:panel>
+
 
 </html>

@@ -89,7 +89,7 @@ public class ContentItem implements Serializable, Comparable<ContentItem> {
 							this.icon = "ui-icon-script";
 							break;
 						default:
-							this.icon = "f-icon-document";
+							this.icon = "ui-icon-document";
 							break;
 						}
 					}

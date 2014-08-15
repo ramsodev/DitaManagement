@@ -9,21 +9,19 @@
 <ui:composition template="/WEB-INF/templates/HomeTemplate.xhtml">
 	<ui:define name="content">
 		<h:form id="form">
-		<p:panel header="Search Results" id="search" rendered="#{homeBean.index}" style="height:100%" >
+		<p:panel  id="search" rendered="#{homeBean.index}" style="height:100%" >
 				<ui:include src="home/search_results.xhtml"></ui:include>
 			</p:panel>
-			<p:panel header="Config" id="config" rendered="#{homeBean.config}" style="height:100%">
+			<p:panel  id="config" rendered="#{homeBean.config}" style="height:100%">
 				<ui:include src="home/config.xhtml"></ui:include>
 			</p:panel> 
-			<p:panel header="File" id="file" rendered="#{homeBean.file}" style="height:100%">
+			<p:panel  id="file" rendered="#{homeBean.file}" style="height:100%">
 				<ui:include src="home/file.xhtml"></ui:include>
 			</p:panel>
-			<p:panel header="Folder" id="folder" rendered="#{homeBean.folder}" style="height:100%">
+			<p:panel  id="folder" rendered="#{homeBean.folder}" style="height:100%">
 				<ui:include src="home/folder.xhtml"></ui:include>
 			</p:panel> 
-			<p:panel header="editor" id="black" rendered="#{homeBean.black}" style="height:100%">
-
-			</p:panel>
+			
 
 		</h:form>
 	</ui:define>

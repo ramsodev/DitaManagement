@@ -6,24 +6,33 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:body>
 	<h:form>
+		<div class="ui-grid-responsive">
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<p:graphicImage name="/images/logo.png" height="40px" style="margin-left:10px"></p:graphicImage>
+				</div>
+				<div class="ui-grid-col-8 cus-header-text">
+					<p:outputLabel value="#{msg['application.default.title']}" />
+				</div>
+				<div class="ui-grid-col-2 cus-header-right">
+					<p:themeSwitcher id="basic" value="#{themeSwitcherView.theme}"
+						effect="fade" rendered="#{loginBean.logeado}"
+						style="margin-right:10px">
+						<f:selectItem itemLabel="Choose Theme" itemValue="" />
+						<f:selectItems value="#{themeSwitcherView.themes}" />
+						<!-- <p:ajax listener="#{bean.saveTheme}" /> -->
 
-		<p:outputLabel value="#{msg['application.default.title']}"
-			style="text-aling:center;" />
-
-		<p:themeSwitcher id="basic" value="#{themeSwitcherView.theme}"
-			effect="fade" rendered="#{loginBean.logeado}"
-			style="text-aling:right;">
-			<f:selectItem itemLabel="Choose Theme" itemValue="" />
-			<f:selectItems value="#{themeSwitcherView.themes}" />
-			<!-- <p:ajax listener="#{bean.saveTheme}" /> -->
-
-		</p:themeSwitcher>
-
-
+					</p:themeSwitcher>
+				</div>
+			</div>
+		</div>
 		<p:menubar rendered="#{loginBean.logeado}" model="#{menuBar.model}">
 			<f:facet name="options">
-				<p:inputText style="margin-right:0px" placeholder="Search" value="#{homeBean.search}" />
-				<p:commandButton actionListener="#{homeBean.find}" icon="ui-icon-search" update=":messages :form" style="margin-right:10px"></p:commandButton>
+				<p:inputText style="margin-right:0px" placeholder="Search"
+					value="#{homeBean.search}" />
+				<p:commandButton actionListener="#{homeBean.find}"
+					icon="ui-icon-search" update=":messages :form"
+					style="margin-right:10px"></p:commandButton>
 			</f:facet>
 		</p:menubar>
 

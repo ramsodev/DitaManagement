@@ -5,20 +5,20 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-
+<f:facet name="header">
+	<p:outputLabel value="Search results for: #{homeBean.search}"></p:outputLabel>
+</f:facet>
 <p:dataList value="#{homeBean.results}" var="result" type="unordered"
 	itemType="none" paginator="true" rows="10" styleClass="paginated">
 	<f:facet name="header">
             Search Results
         </f:facet>
-	<p:commandLink  update=":messages :form">
-		
-		<f:setPropertyActionListener value="#{result}"
+	<p:commandLink update=":messages :form">
+		<f:setPropertyActionListener value="#{result[0]}"
 			target="#{homeBean.selectedResult}" />
-		<h:outputText value="#{result}" style="display:inline-block" />
-
+		<h:outputText value="#{result[0]}" styleClass="cus-search-result" />
 	</p:commandLink>
-	
+	<h:outputText value="#{result[1]}" />
 </p:dataList>
 
 </html>

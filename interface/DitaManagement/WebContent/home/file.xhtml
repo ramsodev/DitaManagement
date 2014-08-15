@@ -5,7 +5,9 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-
+<f:facet name="header">
+<p:outputLabel value="File #{contentTree.selectedData.name}"></p:outputLabel>
+</f:facet>
 <p:tabView id="fileTab" style="height:auto;width:auto">
 	<p:tab title="Map" rendered="#{contentTree.selectedData.render(2)}">
 		<div style="overflow: auto; max-height: 700px;">
@@ -14,37 +16,10 @@
 				<p:ajax event="select" listener="#{bookmapMindMap.onNodeSelect}" />
 				<p:ajax event="dblselect"
 					listener="#{bookmapMindMap.onNodeDblselect}"
-					update=":messages atts" oncomplete="PF('details').show();" />
+					update=":messages :form:atts" oncomplete="PF('details').show();" />
 			</p:mindmap>
 		</div>
-		<p:dialog id="atts" widgetVar="details"
-			header="#{bookmapMindMap.selectedNode.label} Attributes" modal="true"
-			showEffect="fade" hideEffect="fade" minHeight="250"
-			style="max-width:60%;min-height:250;max-height:500">
-			<p:dataTable id="data" var="property"
-				value="#{bookmapMindMap.selectedNode.attributes}" editable="true"
-				editMode="cell" widgetVar="cellProperty" rows="5" paginator="true"
-				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15,20" selectionMode="multiple"
-				selection="#{configEditorBean.selected}" rowKey="#{property.key}"
-				sortBy="#{property.key}" sortOrder="ascending">
-
-				<p:column headerText="Key" sortBy="#{property.key}">
-					<h:outputText value="#{property.key}" />
-				</p:column>
-				<p:column headerText="Value" sortBy="#{property.value}">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{property.value}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="valueInput" value="#{property.value}"
-								style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-			</p:dataTable>
-		</p:dialog>
+		
 	</p:tab>
 	<p:tab title="Preview" style="height:auto;width:auto">
 		<p:graphicImage value="#{applicationsTools.image}"
@@ -68,5 +43,32 @@
 	</p:tab>
 
 </p:tabView>
+<p:dialog id="atts" widgetVar="details"
+			header="#{bookmapMindMap.selectedNode.label} Attributes" modal="false"
+			showEffect="fade" hideEffect="fade" minHeight="250"
+			style="max-width:60%;min-height:250;max-height:500" >
+			<p:dataTable id="datamm" var="property"
+				value="#{bookmapMindMap.selectedNode.attributes}" editable="true"
+				editMode="cell" widgetVar="cellProperty" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15,20" 
+				selection="#{configEditorBean.selected}" rowKey="#{property.key}"
+				sortBy="#{property.key}" sortOrder="ascending">
 
+				<p:column headerText="Key" sortBy="#{property.key}">
+					<h:outputText value="#{property.key}" />
+				</p:column>
+				<p:column headerText="Value" sortBy="#{property.value}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{property.value}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="valueInput" value="#{property.value}"
+								style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
 </html>
