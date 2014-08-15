@@ -1,4 +1,4 @@
 DitaManagement
 ==============
 
-A Document management Server for SITA
+A Document management Server for DITA
