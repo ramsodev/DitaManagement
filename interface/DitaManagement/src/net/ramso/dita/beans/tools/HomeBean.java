@@ -50,7 +50,7 @@ public class HomeBean implements Serializable {
 
 	private boolean index;
 
-	private ArrayList<String> results;
+	private ArrayList<String[]> results;
 	private String selectedResult;
 
 	@PostConstruct
@@ -188,17 +188,27 @@ public class HomeBean implements Serializable {
 	public void find() {
 		setType("search");
 		try {
-			results = new ArrayList<String>();
+			results = new ArrayList<String[]>();
 			ScoreDoc[] r = ContentSearchQuery.getInstance().findFromAll(search);
-			System.out.println("Resultados " + r.length);
 			for (ScoreDoc scoreDoc : r) {
 				Document d = ContentSearchQuery.getInstance().getSearcher()
 						.doc(scoreDoc.doc);
 				String re = d.get("Path");
 				if (re != null) {
-					results.add(re);
+					String[] res = new String[2];
+					res[0] = re;
+					String c = d.get("content");
+					if (c == null) {
+						c = "";
+					}
+					if (c.length() > 500) {
+						c = c.substring(0,500);
+					}
+					res[1]=c;
+					results.add(res);
 				} else {
-					LogManager.warn("The index containg documents with null path");
+					LogManager
+							.warn("The index containg documents with null path");
 				}
 			}
 		} catch (IndexException e) {
@@ -216,11 +226,11 @@ public class HomeBean implements Serializable {
 		this.index = index;
 	}
 
-	public ArrayList<String> getResults() {
+	public ArrayList<String[]> getResults() {
 		return results;
 	}
 
-	public void setResults(ArrayList<String> results) {
+	public void setResults(ArrayList<String[]> results) {
 		this.results = results;
 	}
 
@@ -231,11 +241,11 @@ public class HomeBean implements Serializable {
 	public void setSelectedResult(String selectedResult) {
 		TreeNode sel = contentTree.getByPath(selectedResult, false);
 		if (sel != null) {
-			setType(sel.getType());		
+			setType(sel.getType());
 			getContentTree().setSelected(sel);
 			ApplicationsTools.setSelectedContent((ContentItem) sel.getData());
 			this.selected = (ContentItem) sel.getData();
-		}		
+		}
 		this.selectedResult = selectedResult;
 	}
 }
