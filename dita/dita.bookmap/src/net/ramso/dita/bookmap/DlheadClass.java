@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for dlhead.class complex type.
@@ -39,7 +41,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Dlhead.class
 })
-public class DlheadClass {
+public class DlheadClass extends GenericData {
 
     protected Dthd dthd;
     protected Ddhd ddhd;

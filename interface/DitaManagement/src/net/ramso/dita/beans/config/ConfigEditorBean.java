@@ -1,29 +1,33 @@
 package net.ramso.dita.beans.config;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import net.ramso.dita.beans.tools.HomeBean;
 import net.ramso.utils.ConfManager;
 import net.ramso.utils.ConfigException;
 import net.ramso.utils.Messages;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ConfigEditorBean implements Serializable {
+	
+	@ManagedProperty("#{homeBean}")
+    private HomeBean homeBean;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5161871701960982098L;
-	private ArrayList<ConfigData> configs;
+	private List<ConfigData> configs;
 
 	private List<ConfigData> selected;
 	private String name;
@@ -32,7 +36,7 @@ public class ConfigEditorBean implements Serializable {
 	public void init() {
 		ConfManager conf = ConfManager.getInstance();
 		Properties pro = conf.getPropertiesFile(key);
-		configs = new ArrayList<ConfigData>();
+		configs = ConfigDataTools.getFromProperties(pro);
 		Enumeration<?> names = pro.propertyNames();
 		while (names.hasMoreElements()) {
 			String key = (String) names.nextElement();
@@ -41,7 +45,7 @@ public class ConfigEditorBean implements Serializable {
 
 	}
 
-	public ArrayList<ConfigData> getConfigs() {
+	public List<ConfigData> getConfigs() {
 		if (configs == null) {
 			init();
 		}
@@ -61,6 +65,7 @@ public class ConfigEditorBean implements Serializable {
 	}
 
 	public void setKey(String key) {
+		homeBean.setType("config");
 		name=Messages.getString(key);
 		this.key = key;
 		configs=null;
@@ -107,5 +112,13 @@ public class ConfigEditorBean implements Serializable {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				Messages.getString("ConfigEditorBean.message.delete"), selected.size() + Messages.getString("ConfigEditorBean.message.delete.detail")); //$NON-NLS-1$ //$NON-NLS-2$
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public HomeBean getHomeBean() {
+		return homeBean;
+	}
+
+	public void setHomeBean(HomeBean homeBean) {
+		this.homeBean = homeBean;
 	}
 }

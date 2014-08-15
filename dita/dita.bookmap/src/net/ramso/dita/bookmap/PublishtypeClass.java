@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for publishtype.class complex type.
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Publishtype.class
 })
-public class PublishtypeClass {
+public class PublishtypeClass extends GenericData {
 
     @XmlAttribute(name = "name")
     protected String name;

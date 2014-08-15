@@ -23,6 +23,7 @@ import net.ramso.dita.repository.iFolder;
 public class SVNFolder extends AbstractFolder implements iFolder {
 
 	private SVNRepository repository;
+	private String version;
 
 	/**
 	 * 
@@ -54,7 +55,6 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 
 	@Override
 	public void commit() throws ContentException {
-		System.out.println(getPath());
 		try {
 			if (isDelete()) {
 				SVNTools.delete(repository, getPath());
@@ -83,6 +83,7 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 		rename(null);
 		setModify(false);
 		setDelete(false);
+		version=null;
 	}
 
 	/*
@@ -98,6 +99,7 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 		rename(null);
 		setModify(false);
 		setDelete(false);
+		version=null;
 
 	}
 
@@ -132,6 +134,27 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 		return getPath();
 	}
 
-	
+	@Override
+	public String getStorageType() {
+		return RepositorySVN.TYPE;
+	}
+
+	@Override
+	public String getVersion() throws ContentException {
+		if (version == null) {
+			Collection<SVNDirEntry> entries;
+			try {
+				entries = repository.getDir(getPath(), -1, null,
+						(Collection) null);
+				for (SVNDirEntry entry : entries) {
+					version = "Last Revision: " + entry.getRevision()
+							+ " Message: " + entry.getCommitMessage();
+				}
+			} catch (SVNException e) {
+				throw new ContentException(e);
+			}
+		}
+		return version;
+	}
 
 }

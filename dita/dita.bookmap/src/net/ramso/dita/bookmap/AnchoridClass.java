@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for anchorid.class complex type.
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Anchorid.class
 })
-public class AnchoridClass {
+public class AnchoridClass extends GenericData {
 
     @XmlAttribute(name = "keyref")
     protected String keyref;

@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for booklist.class complex type.
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Booklist.class
 })
-public class BooklistClass {
+public class BooklistClass extends GenericData {
 
     @XmlAttribute(name = "navtitle")
     protected String navtitle;

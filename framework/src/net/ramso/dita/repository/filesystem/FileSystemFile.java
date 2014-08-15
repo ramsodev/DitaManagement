@@ -8,10 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Date;
 
 import net.ramso.dita.repository.AbstractFile;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iFile;
+import net.ramso.dita.repository.content.IndexException;
 import net.ramso.utils.Messages;
 
 /**
@@ -26,8 +28,15 @@ public class FileSystemFile extends AbstractFile implements iFile {
 	public FileSystemFile(File file) {
 		super();
 		this.file = file;
-		if(!file.exists()){
+		if (!file.exists()) {
 			setNew(true);
+			if (!file.getPath().startsWith(FileSystemRepository.ROOT)) {
+				this.file = new File(FileSystemRepository.ROOT + File.separator
+						+ file.getPath());
+				if (this.file.exists()) {
+					setNew(false);
+				}
+			}
 		}
 	}
 
@@ -56,9 +65,10 @@ public class FileSystemFile extends AbstractFile implements iFile {
 			file = new File(path);
 
 			if (!file.isFile()) {
-				throw new ContentException(Messages.getString("FileSystemFile.exception.msg", path) ); //$NON-NLS-1$
+				throw new ContentException(Messages.getString(
+						"FileSystemFile.exception.msg", path)); //$NON-NLS-1$
 			}
-			if(!file.exists()){
+			if (!file.exists()) {
 				setNew(true);
 			}
 		} catch (Exception e) {
@@ -77,18 +87,29 @@ public class FileSystemFile extends AbstractFile implements iFile {
 
 		try {
 			if (isModify() || isNew()) {
-				Files.write(file.toPath(), getContent(),
-						StandardOpenOption.SYNC);
+				file.createNewFile();
+				if (getContent() == null || getContent().length < 1) {
+					
+				} else {
+					addToIndex();
+					Files.write(file.toPath(), getContent(),
+							StandardOpenOption.SYNC);
+				}
 			} else if (isDelete()) {
+				removeFromIndex();
 				file.delete();
 			}
 			if (isRename()) {
+				removeFromIndex();
 				File file2 = new File(file.getParent(), name);
 				file.renameTo(file2);
+				addToIndex();
 			}
 		} catch (FileNotFoundException e) {
 			throw new ContentException(e);
 		} catch (IOException e) {
+			throw new ContentException(e);
+		} catch (IndexException e) {
 			throw new ContentException(e);
 		}
 
@@ -99,7 +120,15 @@ public class FileSystemFile extends AbstractFile implements iFile {
 
 	}
 
-	public byte[] getContent() {
+	public byte[] getContent() throws ContentException {
+		if(content == null){
+			content = new byte[0];
+			try {
+				content = Files.readAllBytes(file.toPath());
+			} catch (IOException e) {
+				throw new ContentException(e);
+			}
+		}
 		return content;
 	}
 
@@ -125,7 +154,26 @@ public class FileSystemFile extends AbstractFile implements iFile {
 	@Override
 	public void setContent(byte[] content) {
 		this.content = content;
+		type = null;
 		setModify(true);
+		size = null;
+		type = null;
+	}
+
+	@Override
+	public String getStorageType() {
+
+		return FileSystemRepository.TYPE;
+	}
+
+	@Override
+	public String getVersion() throws ContentException {
+		return "Last modification:" + new Date(file.lastModified());
+	}
+
+	@Override
+	public String toString() {
+		return getPath();
 	}
 
 }

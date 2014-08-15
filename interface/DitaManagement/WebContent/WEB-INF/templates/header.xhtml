@@ -6,28 +6,27 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:body>
 	<h:form>
-		<div class="ui-grid-row">
-		<div class="ui-grid-col-2" style="text-align: left;"></div>
-			<div class="ui-grid-col-8">
-				<p:outputLabel value="#{msg['application.default.title']}" />
-			</div>
 
-			<div class="ui-grid-col-2" style="text-align: right;">
-				<p:themeSwitcher id="basic" value="#{themeSwitcherView.theme}"
-					effect="fade" rendered="#{loginBean.logeado}">
-					<f:selectItem itemLabel="Choose Theme" itemValue="" />
-					<f:selectItems value="#{themeSwitcherView.themes}" />
-					<!-- <p:ajax listener="#{bean.saveTheme}" /> -->
+		<p:outputLabel value="#{msg['application.default.title']}"
+			style="text-aling:center;" />
 
-				</p:themeSwitcher>
-			</div>
-		</div>
-		<div class="ui-grid-row">
-			<div class="ui-grid-col-12">
-				<p:menubar rendered="#{loginBean.logeado}" model="#{menuBar.model}">
-				</p:menubar>
-			</div>
-		</div>
+		<p:themeSwitcher id="basic" value="#{themeSwitcherView.theme}"
+			effect="fade" rendered="#{loginBean.logeado}"
+			style="text-aling:right;">
+			<f:selectItem itemLabel="Choose Theme" itemValue="" />
+			<f:selectItems value="#{themeSwitcherView.themes}" />
+			<!-- <p:ajax listener="#{bean.saveTheme}" /> -->
+
+		</p:themeSwitcher>
+
+
+		<p:menubar rendered="#{loginBean.logeado}" model="#{menuBar.model}">
+			<f:facet name="options">
+				<p:inputText style="margin-right:0px" placeholder="Search" value="#{homeBean.search}" />
+				<p:commandButton actionListener="#{homeBean.find}" icon="ui-icon-search" update=":messages :form" style="margin-right:10px"></p:commandButton>
+			</f:facet>
+		</p:menubar>
+
 	</h:form>
 
 </h:body>

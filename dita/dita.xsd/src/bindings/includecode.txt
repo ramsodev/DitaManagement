@@ -1,0 +1,13 @@
+incluir en los esquemas por defecto
+
+xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+           jaxb:extensionBindingPrefixes="xjc"
+           jaxb:version="2.0">
+   <xs:annotation>
+       <xs:appinfo>
+          <jaxb:globalBindings>
+              <xjc:superClass name="net.ramso.dita.utils.GenericData"/>
+          </jaxb:globalBindings>
+       </xs:appinfo>
+    </xs:annotation>

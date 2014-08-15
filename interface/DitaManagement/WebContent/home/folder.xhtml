@@ -7,9 +7,36 @@
 
 
 
-				<p:fileUpload
-					fileUploadListener="#{fileUploadView.handleFileUpload}"
-					mode="advanced" dragDropSupport="true" update=":messages" 
-					multiple="true"/>
-			
+<p:tabView>
+	<p:tab title="Content">
+		<p:dataGrid var="content" value="#{contentTree.selectedData.childs}"
+			columns="6" rows="18" paginator="true" id="files"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="12,18,24,30,36" >
+			<p:commandLink update=":messages :form ">
+				<f:setPropertyActionListener value="#{content}" 
+					target="#{homeBean.selected}" />
+				<p:panelGrid columns="1" style="width:16.6%">
+					<f:facet name="header">
+						<p:graphicImage name="icons/#{content.svg}" height="100"
+							styleClass="clean"></p:graphicImage>
+					</f:facet>
+					<p:outputLabel value="#{content.name}" style="max-width:16%"></p:outputLabel>
+				</p:panelGrid>
+			</p:commandLink>
+		</p:dataGrid>
+	</p:tab>
+	<p:tab title="Metadata">
+		<p:dataTable id="metadata" var="property"
+			value="#{contentTree.selectedData.metadata}">
+			<p:column headerText="Key" sortBy="#{property.key}">
+				<h:outputText value="#{property.key}" />
+			</p:column>
+			<p:column headerText="Value" sortBy="#{property.value}">
+				<h:outputText value="#{property.value}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+</p:tabView>
+
 </html>

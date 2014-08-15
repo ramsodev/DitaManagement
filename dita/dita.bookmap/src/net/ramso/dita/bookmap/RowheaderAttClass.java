@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "rowheader-att.class")
 @XmlEnum
-public enum RowheaderAttClass {
+public enum RowheaderAttClass  {
 
     @XmlEnumValue("firstcol")
     FIRSTCOL("firstcol"),

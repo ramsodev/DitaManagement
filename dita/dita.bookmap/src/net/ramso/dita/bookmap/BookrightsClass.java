@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for bookrights.class complex type.
@@ -43,7 +45,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Bookrights.class
 })
-public class BookrightsClass {
+public class BookrightsClass extends GenericData {
 
     protected Copyrfirst copyrfirst;
     protected Copyrlast copyrlast;

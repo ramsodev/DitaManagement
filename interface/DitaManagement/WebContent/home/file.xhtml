@@ -6,10 +6,67 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
+<p:tabView id="fileTab" style="height:auto;width:auto">
+	<p:tab title="Map" rendered="#{contentTree.selectedData.render(2)}">
+		<div style="overflow: auto; max-height: 700px;">
+			<p:mindmap id="mindmap" value="#{bookmapMindMap.root}"
+				style="width:100%;height:1000px;min-height:600px;border: 1px solid black;">
+				<p:ajax event="select" listener="#{bookmapMindMap.onNodeSelect}" />
+				<p:ajax event="dblselect"
+					listener="#{bookmapMindMap.onNodeDblselect}"
+					update=":messages atts" oncomplete="PF('details').show();" />
+			</p:mindmap>
+		</div>
+		<p:dialog id="atts" widgetVar="details"
+			header="#{bookmapMindMap.selectedNode.label} Attributes" modal="true"
+			showEffect="fade" hideEffect="fade" minHeight="250"
+			style="max-width:60%;min-height:250;max-height:500">
+			<p:dataTable id="data" var="property"
+				value="#{bookmapMindMap.selectedNode.attributes}" editable="true"
+				editMode="cell" widgetVar="cellProperty" rows="5" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15,20" selectionMode="multiple"
+				selection="#{configEditorBean.selected}" rowKey="#{property.key}"
+				sortBy="#{property.key}" sortOrder="ascending">
 
-				<p:fileUpload
-					fileUploadListener="#{fileUploadView.handleFileUpload}"
-					mode="advanced" dragDropSupport="true" update=":messages" 
-					multiple="true"/>
-			
+				<p:column headerText="Key" sortBy="#{property.key}">
+					<h:outputText value="#{property.key}" />
+				</p:column>
+				<p:column headerText="Value" sortBy="#{property.value}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{property.value}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="valueInput" value="#{property.value}"
+								style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+	</p:tab>
+	<p:tab title="Preview" style="height:auto;width:auto">
+		<p:graphicImage value="#{applicationsTools.image}"
+			rendered="#{contentTree.selectedData.render(1)}" cache="false">
+		</p:graphicImage>
+		<p:editor id="editor" widgetVar="editorWidget" 
+			value="#{contentTree.selectedData.text}"
+			rendered="#{contentTree.selectedData.render(0)}"
+			style="height:auto;width:auto" controls="source" />
+	</p:tab>
+	<p:tab title="Metadata">
+		<p:dataTable id="metadata" var="property"
+			value="#{contentTree.selectedData.metadata}">
+			<p:column headerText="Key" sortBy="#{property.key}">
+				<h:outputText value="#{property.key}" />
+			</p:column>
+			<p:column headerText="Value" sortBy="#{property.value}">
+				<h:outputText value="#{property.value}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+</p:tabView>
+
 </html>

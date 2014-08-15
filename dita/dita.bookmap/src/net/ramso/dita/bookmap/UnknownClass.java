@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import net.ramso.dita.utils.GenericData;
+
 import org.w3c.dom.Element;
 
 
@@ -40,7 +43,7 @@ import org.w3c.dom.Element;
 @XmlSeeAlso({
     Unknown.class
 })
-public class UnknownClass {
+public class UnknownClass extends GenericData {
 
     @XmlAnyElement
     protected Element any;

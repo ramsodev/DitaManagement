@@ -31,5 +31,7 @@
 			<attribute name="owner.project.facets" value="jst.jsf"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/dita.bookmap"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dita.xsd"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

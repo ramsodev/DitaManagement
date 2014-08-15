@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "valuetype-att.class")
 @XmlEnum
-public enum ValuetypeAttClass {
+public enum ValuetypeAttClass  {
 
     @XmlEnumValue("data")
     DATA("data"),

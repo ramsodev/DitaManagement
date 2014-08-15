@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -21,11 +22,14 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 public class JAXBUtils {
 
@@ -55,7 +59,8 @@ public class JAXBUtils {
 		}
 	}
 
-	public void marshall(Object obj, OutputStream outStream) throws JAXBException {
+	public void marshall(Object obj, OutputStream outStream)
+			throws JAXBException {
 		Marshaller m = jaxbContext.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		m.marshal(obj, outStream);
@@ -77,15 +82,16 @@ public class JAXBUtils {
 		m.marshal(obj, doc);
 		return doc.getDocumentElement();
 	}
-	
 
-	
-	public void marshallToFile(Object obj, String path, String fileName, String schemaLocation) throws JAXBException, FileNotFoundException {
+	public void marshallToFile(Object obj, String path, String fileName,
+			String schemaLocation) throws JAXBException, FileNotFoundException {
 		try {
 			Writer writer = new FileWriter(path + File.separator + fileName);
 			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+					Boolean.TRUE);
+			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
+					schemaLocation);
 			marshaller.marshal(obj, writer);
 			writer.close();
 		} catch (IOException e) {
@@ -93,12 +99,14 @@ public class JAXBUtils {
 			e.printStackTrace();
 		}
 	}
-	
-	public void marshallToFile(Object obj, String path, String fileName) throws JAXBException, FileNotFoundException {
+
+	public void marshallToFile(Object obj, String path, String fileName)
+			throws JAXBException, FileNotFoundException {
 		try {
 			Writer writer = new FileWriter(path + File.separator + fileName);
 			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+					Boolean.TRUE);
 			marshaller.marshal(obj, writer);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -120,8 +128,9 @@ public class JAXBUtils {
 		return jaxbContext.createUnmarshaller();
 	}
 
-	public Object unmarshallFromXmlPath(String xmlPath) throws JAXBException, IOException {
-		
+	public Object unmarshallFromXmlPath(String xmlPath) throws JAXBException,
+			IOException {
+
 		try {
 			ResourcesLocator resourcesLocator;
 			resourcesLocator = new ResourcesLocator(xmlPath);
@@ -158,7 +167,7 @@ public class JAXBUtils {
 		Unmarshaller um = jaxbContext.createUnmarshaller();
 		return um.unmarshal(node);
 	}
-	
+
 	public Object unmarshall(byte[] content) throws JAXBException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
 		return this.unmarshall(bais);
@@ -187,4 +196,16 @@ public class JAXBUtils {
 		return list;
 	}
 
+	public static void getAttributes(String element, String xsd) {
+		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
+        try {
+        	
+			Schema schema = sf.newSchema(new File("customer.xsd"));
+			
+        } catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
 }

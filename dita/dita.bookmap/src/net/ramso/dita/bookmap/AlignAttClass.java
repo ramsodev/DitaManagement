@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "align-att.class")
 @XmlEnum
-public enum AlignAttClass {
+public enum AlignAttClass  {
 
     @XmlEnumValue("left")
     LEFT("left"),

@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for copyryear.class complex type.
@@ -34,7 +36,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlSeeAlso({
     Copyryear.class
 })
-public class CopyryearClass {
+public class CopyryearClass extends GenericData {
 
     @XmlAttribute(name = "year", required = true)
     @XmlSchemaType(name = "gYear")

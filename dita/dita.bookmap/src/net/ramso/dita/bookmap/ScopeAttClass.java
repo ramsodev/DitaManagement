@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "scope-att.class")
 @XmlEnum
-public enum ScopeAttClass {
+public enum ScopeAttClass  {
 
     @XmlEnumValue("local")
     LOCAL("local"),

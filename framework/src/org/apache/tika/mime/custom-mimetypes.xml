@@ -1,0 +1,8 @@
+
+  <mime-type type="application/dita+xml;format=bookmap">
+    <sub-class-of type="application/dita+xml;format=map"/>
+    <_comment>DITA Map</_comment>
+    <root-XML localName="bookmap"/>
+    <root-XML localName="bookmap" namespaceURI="http://docs.oasis-open.org/namespace"/>
+  </mime-type>
+  

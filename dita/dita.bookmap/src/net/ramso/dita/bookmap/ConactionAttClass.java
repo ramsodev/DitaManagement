@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "conaction-att.class")
 @XmlEnum
-public enum ConactionAttClass {
+public enum ConactionAttClass  {
 
     @XmlEnumValue("mark")
     MARK("mark"),

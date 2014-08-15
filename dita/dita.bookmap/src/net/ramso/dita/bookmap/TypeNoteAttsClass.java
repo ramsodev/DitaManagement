@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "type-note-atts.class")
 @XmlEnum
-public enum TypeNoteAttsClass {
+public enum TypeNoteAttsClass  {
 
     @XmlEnumValue("attention")
     ATTENTION("attention"),

@@ -22,5 +22,6 @@ public interface iContent {
 	void addChild(iContent child)throws ContentException;
 	void commit() throws ContentException;
 	void update() throws ContentException;
-
+	String getStorageType();
+	String getVersion() throws ContentException;
 }

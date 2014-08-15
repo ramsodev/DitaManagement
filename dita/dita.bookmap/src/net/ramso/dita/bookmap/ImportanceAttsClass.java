@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "importance-atts.class")
 @XmlEnum
-public enum ImportanceAttsClass {
+public enum ImportanceAttsClass  {
 
     @XmlEnumValue("obsolete")
     OBSOLETE("obsolete"),

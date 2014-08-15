@@ -14,7 +14,6 @@ import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
 import net.ramso.utils.Messages;
 
-import org.apache.commons.collections.functors.StringValueTransformer;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNURL;
@@ -31,6 +30,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  *
  */
 public class RepositorySVN implements IRepository {
+	public static final String TYPE = "SVN";
 	SVNRepository repository = null;
 	private SVNURL url;
 	private ISVNAuthenticationManager authManager;

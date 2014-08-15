@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "role-att.class")
 @XmlEnum
-public enum RoleAttClass {
+public enum RoleAttClass  {
 
     @XmlEnumValue("parent")
     PARENT("parent"),

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "collection-type.class")
 @XmlEnum
-public enum CollectionTypeClass {
+public enum CollectionTypeClass  {
 
     @XmlEnumValue("choice")
     CHOICE("choice"),

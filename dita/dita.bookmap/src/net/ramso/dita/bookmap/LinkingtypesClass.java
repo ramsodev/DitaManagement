@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "linkingtypes.class")
 @XmlEnum
-public enum LinkingtypesClass {
+public enum LinkingtypesClass  {
 
     @XmlEnumValue("targetonly")
     TARGETONLY("targetonly"),

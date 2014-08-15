@@ -1,0 +1,41 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:form id="treef">
+	<p:toolbar>
+		<f:facet name="left">
+			<p:commandButton title="#{msg['toolbar.config.add']}"
+				actionListener="#{homeBean.add}" partialSubmit="true"
+				update=":messages tree" icon="ui-icon-plus">
+				<f:setPropertyActionListener target="#{homeBean.content}"
+					value="#{contentTree.selected}" />
+			</p:commandButton>
+			<p:commandButton title="#{msg['toolbar.config.delete']}"
+				icon="ui-icon-trash" actionListener="#{contentTree.delete}"
+				update=":messages tree" />
+			<p:commandButton title="#{msg['toolbar.config.refresh']}"
+				icon="ui-icon-refresh" actionListener="#{contentTree.refresh}"
+				update=":messages tree" />
+		</f:facet>
+	</p:toolbar>
+	<p:tree id="tree" value="#{contentTree.root}" var="node"
+		selectionMode="single" selection="#{contentTree.selected}"
+		style="width:100%">
+		<p:ajax event="select" listener="#{homeBean.onSelect}" update=":form" />
+		<p:treeNode expandedIcon="#{node.iconOpen}"
+			collapsedIcon="#{node.iconClose}">
+			<h:outputText value="#{node.name}" />
+		</p:treeNode>
+		<p:treeNode type="document" icon="#{node.icon}">
+			<h:outputText value="#{node.name}" />
+		</p:treeNode>
+		<p:treeNode type="resource" icon="#{node.icon}">
+			<h:outputText value="#{node.name}" />
+		</p:treeNode>
+	</p:tree>
+</h:form>
+</html>

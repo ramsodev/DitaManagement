@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "status-atts.class")
 @XmlEnum
-public enum StatusAttsClass {
+public enum StatusAttsClass  {
 
     @XmlEnumValue("new")
     NEW("new"),

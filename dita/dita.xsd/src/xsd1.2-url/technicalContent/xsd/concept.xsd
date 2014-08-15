@@ -22,7 +22,18 @@
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+           jaxb:extensionBindingPrefixes="xjc"
+           jaxb:version="2.0">
+   <xs:annotation>
+       <xs:appinfo>
+          <jaxb:globalBindings>
+              <xjc:superClass name="net.ramso.dita.utils.GenericData"/>
+          </jaxb:globalBindings>
+       </xs:appinfo>
+    </xs:annotation>
   <!-- Add the domains to the base topic XML Schema -->
   <!--  ================ TOPIC DOMAINS INLCUSION =====================  -->
   <xs:include schemaLocation="uiDomain.xsd"/>

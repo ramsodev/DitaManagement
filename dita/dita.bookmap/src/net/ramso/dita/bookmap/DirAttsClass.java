@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "dir-atts.class")
 @XmlEnum
-public enum DirAttsClass {
+public enum DirAttsClass  {
 
     @XmlEnumValue("ltr")
     LTR("ltr"),

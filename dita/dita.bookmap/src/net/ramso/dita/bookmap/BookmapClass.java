@@ -2,9 +2,13 @@
 package net.ramso.dita.bookmap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -12,6 +16,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.namespace.QName;
+
+import net.ramso.dita.utils.GenericData;
 
 
 /**
@@ -50,7 +57,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Bookmap.class
 })
-public class BookmapClass {
+public class BookmapClass extends GenericData{
 
     protected Title title;
     protected Booktitle booktitle;
@@ -133,7 +140,8 @@ public class BookmapClass {
     protected ConactionAttClass conaction;
     @XmlAttribute(name = "conkeyref")
     protected String conkeyref;
-
+    
+   
     /**
      * Gets the value of the title property.
      * 

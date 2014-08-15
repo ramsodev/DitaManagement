@@ -2,11 +2,11 @@ package net.ramso.utils;
 
 import java.util.Properties;
 
-import net.ramso.dita.content.ContentFactory;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
 import net.ramso.dita.repository.RepositoryFactory;
+import net.ramso.dita.repository.content.ContentFactory;
 
 public class ApplicationConfiguration {
 

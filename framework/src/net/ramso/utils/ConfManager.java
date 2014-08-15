@@ -25,21 +25,13 @@ public class ConfManager {
 	 */
 	public static final String LOG_TYPE = "log.type"; //$NON-NLS-1$
 	public static final String LOGPREFIX = "log"; //$NON-NLS-1$
+	public static final String INDEX ="application.index.dir";//$NON-NLS-1$
 	public static String APPNAME = ""; //$NON-NLS-1$
+	public static String STATUS = "application.status"; //$NON-NLS-1$
 	private static String ABSOLUTEDISKPATH = null;
 	private static ConfManager conf;
 	private HashMap<String, Properties> propertiesFiles = new HashMap<String, Properties>();
 	private Properties properties;
-
-	/**
-	 * Tipos admitido de log para configurar
-	 * 
-	 * @author jescudero
-	 * 
-	 */
-	public enum LOG_TYPES {
-		jdk, log4j
-	};
 
 	protected ConfManager() {
 
@@ -72,15 +64,9 @@ public class ConfManager {
 
 	public void initLogging() {
 		APPNAME = getProperty(LOGPREFIX + "." + "name"); //$NON-NLS-1$ //$NON-NLS-2$
-		LOG_TYPES logtype = LOG_TYPES.valueOf(getProperty(LOG_TYPE));
-		switch (logtype) {
-		case jdk:
+		if (LogTypes.JDK.getType().equals(getProperty(LOG_TYPE))) {
 			System.setProperty("java.util.logging.config.file", //$NON-NLS-1$
 					getProperty(FILEPREFIX + LOGPREFIX));
-			break;
-
-		default:
-			break;
 		}
 	}
 
@@ -186,5 +172,33 @@ public class ConfManager {
 
 		}
 		return out;
+	}
+
+	public String getStatus() {
+		return properties.getProperty(STATUS,
+				ApplicationStatus.SETUP_PENDING.getStatus());
+	}
+
+	public void setStatus(ApplicationStatus status) throws ConfigException {
+		Date today = new Date(System.currentTimeMillis());
+		String comments = today + "Application status changed";
+		properties.setProperty(STATUS, status.getStatus());
+		try {
+			OutputStream out = getOutputProperties(PROPERTIESNAME);
+			if (out != null) {
+				properties.store(out, comments);
+				init();
+			} else {
+				throw new ConfigException(
+						Messages.getString(
+								"ConfManager.exception.properfies.file.notfound", STATUS)); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		} catch (IOException e) {
+			throw new ConfigException(e);
+		}
+	}
+	
+	public String getIndexDir() {
+		return properties.getProperty(INDEX);
 	}
 }

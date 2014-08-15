@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for personinfo.class complex type.
@@ -41,7 +43,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Personinfo.class
 })
-public class PersoninfoClass {
+public class PersoninfoClass extends GenericData {
 
     protected Namedetails namedetails;
     protected Addressdetails addressdetails;

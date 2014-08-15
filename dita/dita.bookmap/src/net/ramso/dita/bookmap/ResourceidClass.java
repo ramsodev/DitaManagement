@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for resourceid.class complex type.
@@ -30,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     Resourceid.class
 })
-public class ResourceidClass {
+public class ResourceidClass extends GenericData {
 
     @XmlAttribute(name = "id", required = true)
     protected String id;

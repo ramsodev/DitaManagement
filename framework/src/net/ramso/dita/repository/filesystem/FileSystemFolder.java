@@ -6,6 +6,7 @@ package net.ramso.dita.repository.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import net.ramso.dita.repository.AbstractFolder;
 import net.ramso.dita.repository.ContentException;
@@ -26,16 +27,20 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 		folder = file;
 		if (!folder.exists()) {
 			setNew(true);
+			if (!folder.getPath().startsWith(FileSystemRepository.ROOT)) {
+				this.folder = new File(FileSystemRepository.ROOT + File.separator
+						+ folder.getPath());
+				if (this.folder.exists()) {
+					setNew(false);
+				}
+			}
+
 		}
 	}
 
-	public FileSystemFolder(String root) {
-		super();
-		try {
-			setPath(root);
-		} catch (ContentException e) {
-			e.printStackTrace();
-		}
+	public FileSystemFolder(String path) {
+		this(new File(path));
+		
 	}
 
 	/*
@@ -57,13 +62,14 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 	public void setPath(String path) throws ContentException {
 		try {
 			folder = new File(path);
-
-			if (!folder.isDirectory()) {
-				throw new ContentException(Messages.getString("FileSystemFolder.exception.msg",path)); //$NON-NLS-1$
-			}
 			if (!folder.exists()) {
 				setNew(true);
+
+			} else if (!folder.isDirectory()) {
+				throw new ContentException(Messages.getString(
+						"FileSystemFolder.exception.msg", path)); //$NON-NLS-1$
 			}
+
 		} catch (Exception e) {
 			throw new ContentException(e);
 		}
@@ -78,12 +84,16 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 	@Override
 	public ArrayList<iContent> getChilds() {
 		if (childs == null) {
+			childs = new ArrayList<iContent>();
 			File[] files = folder.listFiles();
-			for (File file : files) {
-				if (file.isDirectory()) {
-					childs.add(new FileSystemFolder(file));
-				} else {
-					childs.add(new FileSystemFile(file));
+			if (files != null) {
+				for (File file : files) {
+					if (file.isDirectory()) {
+						FileSystemFolder f = new FileSystemFolder(file);
+						childs.add(f);
+					} else {
+						childs.add(new FileSystemFile(file));
+					}
 				}
 			}
 		}
@@ -94,16 +104,36 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 	public void commit() throws ContentException {
 		try {
 			if (isNew()) {
-				folder.createNewFile();
+				folder.mkdirs();
 			} else if (isRename()) {
 				File file = new File(folder.getParent(), getRename());
 				folder.renameTo(file);
+			}else if(isDelete()){
+				if(!folder.delete()){
+					throw new ContentException("The folder " + getPath() + " not delete");
+				}
 			}
 			super.commit();
-		} catch (IOException e) {
+		} catch (SecurityException e) {
 			throw new ContentException(e);
 		}
 
+	}
+
+	@Override
+	public String getStorageType() {
+
+		return FileSystemRepository.TYPE;
+	}
+
+	@Override
+	public String getVersion() throws ContentException {
+		return "Last modification:" + new Date(folder.lastModified());
+	}
+
+	@Override
+	public String toString() {
+		return getPath();
 	}
 
 }

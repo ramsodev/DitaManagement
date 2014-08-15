@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import net.ramso.dita.utils.GenericData;
+
 
 /**
  * <p>Java class for organizationinfo.class complex type.
@@ -42,7 +44,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlSeeAlso({
     Organizationinfo.class
 })
-public class OrganizationinfoClass {
+public class OrganizationinfoClass extends GenericData {
 
     protected Namedetails namedetails;
     protected Addressdetails addressdetails;

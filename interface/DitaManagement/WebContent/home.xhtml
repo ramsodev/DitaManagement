@@ -8,22 +8,25 @@
 
 <ui:composition template="/WEB-INF/templates/HomeTemplate.xhtml">
 	<ui:define name="content">
-		<h:form id="formE">
-			<p:panel header="Add Files" id="upload" rendered="#{homeBean.upload}">
-				<ui:include src="/home/upload.xhtml"></ui:include>
+		<h:form id="form">
+		<p:panel header="Search Results" id="search" rendered="#{homeBean.index}" style="height:100%" >
+				<ui:include src="home/search_results.xhtml"></ui:include>
 			</p:panel>
-			<p:panel header="Folder" id="file" rendered="#{homeBean.file}">
-
+			<p:panel header="Config" id="config" rendered="#{homeBean.config}" style="height:100%">
+				<ui:include src="home/config.xhtml"></ui:include>
+			</p:panel> 
+			<p:panel header="File" id="file" rendered="#{homeBean.file}" style="height:100%">
+				<ui:include src="home/file.xhtml"></ui:include>
 			</p:panel>
-			<p:panel header="File" id="folder" rendered="#{homeBean.folder}">
-
-			</p:panel>
-			<p:panel header="editor" id="black" rendered="#{homeBean.black}">
+			<p:panel header="Folder" id="folder" rendered="#{homeBean.folder}" style="height:100%">
+				<ui:include src="home/folder.xhtml"></ui:include>
+			</p:panel> 
+			<p:panel header="editor" id="black" rendered="#{homeBean.black}" style="height:100%">
 
 			</p:panel>
 
 		</h:form>
-	</ui:define> 
+	</ui:define>
 </ui:composition>
 
 </html>

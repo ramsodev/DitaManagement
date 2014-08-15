@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "workflow-att.class")
 @XmlEnum
-public enum WorkflowAttClass {
+public enum WorkflowAttClass  {
 
     @XmlEnumValue("author")
     AUTHOR("author"),

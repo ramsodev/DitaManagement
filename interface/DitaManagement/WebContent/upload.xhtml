@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">
+			<h:outputText value="Upload Files" />
+		</ui:insert></title>
+
+	<h:outputStylesheet library="css" name="grid.css" />
+	<h:outputStylesheet library="css" name="custom.css" />
+</h:head>
+
+<h:body style="text-align:center">
+	<h:form enctype="multipart/form-data">
+		<p:outputPanel>Select files to add to the selected folder. If added a zip file the application extract the content in the folder</p:outputPanel>
+		<p:fileUpload
+			fileUploadListener="#{applicationsTools.handleFileUpload}"
+			mode="advanced" dragDropSupport="true" update=":footer:messages"
+			multiple="true" />
+
+	</h:form>
+	<h:form id="footer">
+		<p:commandButton value="Commit Changes" icon="ui-icon-close"
+			actionListener="#{applicationsTools.commit()}" />
+		<p:messages id="messages" autoUpdate="true" showDetail="true" />
+	</h:form>
+
+</h:body>
+
+</html>

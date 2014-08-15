@@ -9,6 +9,8 @@ import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;
+import net.ramso.dita.repository.content.ContentFactory;
+import net.ramso.utils.ApplicationConfiguration;
 
 import org.tmatesoft.svn.core.SVNException;
 
@@ -19,38 +21,38 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		IRepository repo;
-		try {
-			 repo = RepositoryFactory.getRepositoryInstance();
-			
-			repo.connect();
-			iContent content = repo.getRoot();
-			 createFolder(repo, content, "Test");
+		ApplicationConfiguration ac = new ApplicationConfiguration();
+		ac.init();
+		ContentFactory cFactory = ContentFactory.getInstance();
 
-//			iFolder iContent = (iFolder) repo.getContent("/Test");
-//
-//			deleteFolder(repo, iContent);
-			iFolder iContent = (iFolder) repo.getFolder("/Test");
-//			deleteFolder(repo, iContent);
-//			iContent = (iFolder) repo.getContent("/Test2");
-//			deleteFolder(repo, iContent);
-//			deleteFile(repo, iContent, iContent.getChilds().get(0));
-//			modFiles(repo, iContent, (iFile) iContent.getChilds().get(0));
-			 renameFolder(repo, content, iContent, "cambia");
+		try {
+
+			
+//			iContent content = repo.getRoot();
+			// createFolder(repo, content, "Test");
+			iFile f = cFactory.getFile("/dita/projects/DDR/sibbac.dita");
+			System.out.println(f.getMime());
+			// iFolder iContent = (iFolder) repo.getContent("/Test");
+			//
+			// deleteFolder(repo, iContent);
+//			iFolder iContent = (iFolder) repo.getFolder("/Test");
+			// deleteFolder(repo, iContent);
+			// iContent = (iFolder) repo.getContent("/Test2");
+			// deleteFolder(repo, iContent);
+			// deleteFile(repo, iContent, iContent.getChilds().get(0));
+			// modFiles(repo, iContent, (iFile) iContent.getChilds().get(0));
+//			renameFolder(repo, content, iContent, "cambia");
 
 			// }
 			// }
 
 			// String tabs = "";
 			// displayChilds(tabs, childs);
-			repo.disconnect();
+			cFactory.disconnect();
 		} catch (ContentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SVNException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RepositoryException e1) {
+		}  catch (RepositoryException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -74,8 +76,8 @@ public class Test {
 
 	private static void addFiles(IRepository repo, iFolder folder, String name)
 			throws ContentException {
-		SVNFile file = new SVNFile(((RepositorySVN)repo).getRepository(), folder.getPath() + "/"
-				+ name);
+		SVNFile file = new SVNFile(((RepositorySVN) repo).getRepository(),
+				folder.getPath() + "/" + name);
 		file.setNew(true);
 		file.setContent("Texto de prueba".getBytes());
 		folder.addChild(file);
@@ -91,8 +93,9 @@ public class Test {
 
 	private static void createFolder(IRepository repo, iContent content,
 			String name) throws ContentException, SVNException {
-		SVNFolder folder = new SVNFolder(((RepositorySVN)repo).getRepository(),
-				content.getPath() + "/" + name);
+		SVNFolder folder = new SVNFolder(
+				((RepositorySVN) repo).getRepository(), content.getPath() + "/"
+						+ name);
 		folder.setNew(true);
 		content.addChild(folder);
 		addFiles(repo, folder, "file1.txt");
