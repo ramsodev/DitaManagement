@@ -1,10 +1,9 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository.filesystem;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,6 +19,10 @@ import net.ramso.utils.Messages;
  */
 public class FileSystemFolder extends AbstractFolder implements iFolder {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -7256170357450997869L;
 	private File folder;
 
 	public FileSystemFolder(File file) {
@@ -28,9 +31,9 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 		if (!folder.exists()) {
 			setNew(true);
 			if (!folder.getPath().startsWith(FileSystemRepository.ROOT)) {
-				this.folder = new File(FileSystemRepository.ROOT + File.separator
+				folder = new File(FileSystemRepository.ROOT + File.separator
 						+ folder.getPath());
-				if (this.folder.exists()) {
+				if (folder.exists()) {
 					setNew(false);
 				}
 			}
@@ -40,12 +43,57 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 
 	public FileSystemFolder(String path) {
 		this(new File(path));
-		
+
+	}
+
+	@Override
+	public void commit() throws ContentException {
+		try {
+			if (isNew()) {
+				folder.mkdirs();
+			} else if (isRename()) {
+				final File file = new File(folder.getParent(), getRename());
+				folder.renameTo(file);
+			} else if (isDelete()) {
+				if (!folder.delete()) {
+					throw new ContentException("The folder " + getPath()
+							+ " not delete");
+				}
+			}
+			super.commit();
+		} catch (final SecurityException e) {
+			throw new ContentException(e);
+		}
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see net.ramso.dita.repository.iContent#getChilds()
+	 */
+	@Override
+	public ArrayList<iContent> getChilds() {
+		if (childs == null) {
+			childs = new ArrayList<iContent>();
+			final File[] files = folder.listFiles();
+			if (files != null) {
+				for (final File file : files) {
+					if (file.isDirectory()) {
+						final FileSystemFolder f = new FileSystemFolder(file);
+						childs.add(f);
+					} else {
+						childs.add(new FileSystemFile(file));
+					}
+				}
+			}
+		}
+		return childs;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see net.ramso.dita.repository.iContent#getPath()
 	 */
 	@Override
@@ -53,9 +101,20 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 		return folder.getPath();
 	}
 
+	@Override
+	public String getStorageType() {
+
+		return FileSystemRepository.TYPE;
+	}
+
+	@Override
+	public String getVersion() throws ContentException {
+		return "Last modification:" + new Date(folder.lastModified());
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see net.ramso.dita.repository.iContent#setPath(java.lang.String)
 	 */
 	@Override
@@ -70,65 +129,10 @@ public class FileSystemFolder extends AbstractFolder implements iFolder {
 						"FileSystemFolder.exception.msg", path)); //$NON-NLS-1$
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ContentException(e);
 		}
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#getChilds()
-	 */
-	@Override
-	public ArrayList<iContent> getChilds() {
-		if (childs == null) {
-			childs = new ArrayList<iContent>();
-			File[] files = folder.listFiles();
-			if (files != null) {
-				for (File file : files) {
-					if (file.isDirectory()) {
-						FileSystemFolder f = new FileSystemFolder(file);
-						childs.add(f);
-					} else {
-						childs.add(new FileSystemFile(file));
-					}
-				}
-			}
-		}
-		return childs;
-	}
-
-	@Override
-	public void commit() throws ContentException {
-		try {
-			if (isNew()) {
-				folder.mkdirs();
-			} else if (isRename()) {
-				File file = new File(folder.getParent(), getRename());
-				folder.renameTo(file);
-			}else if(isDelete()){
-				if(!folder.delete()){
-					throw new ContentException("The folder " + getPath() + " not delete");
-				}
-			}
-			super.commit();
-		} catch (SecurityException e) {
-			throw new ContentException(e);
-		}
-
-	}
-
-	@Override
-	public String getStorageType() {
-
-		return FileSystemRepository.TYPE;
-	}
-
-	@Override
-	public String getVersion() throws ContentException {
-		return "Last modification:" + new Date(folder.lastModified());
 	}
 
 	@Override

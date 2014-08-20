@@ -7,7 +7,7 @@
 
 .ui-layout-north {
 	z-index: 20 !important;
-	overflow: visible !important;;
+	overflow: visible !important;
 }
 
 .ui-layout-north .ui-layout-unit-content {
@@ -41,4 +41,7 @@
 .cus-header-right{
 	text-align: right;
 	vertical-align: middle;
+}
+.cus-grid-panel tr, .cus-grid-panel td {
+    border: none !important;
 }

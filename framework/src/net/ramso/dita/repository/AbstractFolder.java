@@ -1,9 +1,8 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository;
 
-import java.util.ArrayList;
 
 /**
  * @author ramso
@@ -11,7 +10,18 @@ import java.util.ArrayList;
  */
 public abstract class AbstractFolder extends AbstractContent implements iFolder {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8436973110239733672L;
 	protected String name = null;
+
+	/**
+	 *
+	 */
+	public AbstractFolder() {
+		super();
+	}
 
 	/**
 	 * @param path
@@ -20,21 +30,6 @@ public abstract class AbstractFolder extends AbstractContent implements iFolder 
 		super(path);
 	}
 
-	/**
-	 * 
-	 */
-	public AbstractFolder() {
-		super();
-	}
-
-	/* (non-Javadoc)
-	 * @see net.ramso.dita.repository.iFile#rename(java.lang.String)
-	 */
-	@Override
-	public void rename(String name) throws ContentException {
-		this.name  = name;
-
-	}
 	@Override
 	public String getRename() {
 		return name;
@@ -42,6 +37,17 @@ public abstract class AbstractFolder extends AbstractContent implements iFolder 
 
 	@Override
 	public boolean isRename() {
-		return getRename()!=null;
+		return getRename() != null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.ramso.dita.repository.iFile#rename(java.lang.String)
+	 */
+	@Override
+	public void rename(String name) throws ContentException {
+		this.name = name;
+
 	}
 }

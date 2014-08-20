@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="libs/svnkit-1.8.5.jar"/>
-	<classpathentry kind="lib" path="libs/openjpa-all-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-jdk14-1.7.7.jar"/>
 	<classpathentry kind="lib" path="libs/dita.concept.jar"/>
@@ -32,5 +31,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/dita.bookmap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dita.xsd"/>
 	<classpathentry kind="lib" path="/DitaManagement/WebContent/WEB-INF/lib/lucene-core-4.9.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/derby"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/openjpa2.1"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.IRepository;
 import net.ramso.dita.repository.RepositoryException;
-import net.ramso.dita.repository.RepositoryFactory;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFile;
 import net.ramso.dita.repository.iFolder;

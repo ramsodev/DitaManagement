@@ -1,10 +1,9 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository.content;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -25,27 +24,59 @@ import net.ramso.dita.repository.iFile;
 import net.ramso.dita.task.Task;
 import net.ramso.dita.topic.Topic;
 
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.bouncycastle.jce.provider.JCEBlockCipher.SEED;
 import org.w3c.dom.Document;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
  * A tool class to convert the iFile in jaxb java beans
- * 
+ *
  * @author ramso
  *
  */
 public class DitaTools {
 	/**
+	 * Get the type of Dita document of the repository file
+	 *
+	 * @see Bookmap
+	 * @see Concept
+	 * @see Glossgroup
+	 * @see Glossentry
+	 * @see Map
+	 * @see Reference
+	 * @see Task
+	 * @see Topic
+	 * @param content
+	 * @return
+	 * @throws ContentException
+	 */
+	public static DitaTypes getDataType(byte[] content) throws ContentException {
+		try {
+			final ByteArrayInputStream bais = new ByteArrayInputStream(content);
+			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			dbFactory
+			.setFeature(
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+					false);
+			dbFactory.setFeature("http://xml.org/sax/features/validation", //$NON-NLS-1$
+					false);
+			dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			DocumentBuilder dBuilder;
+
+			dBuilder = dbFactory.newDocumentBuilder();
+			final Document doc = dBuilder.parse(bais);
+			final DitaTypes type = DitaTypes.get(doc.getDoctype().getName());
+			return type;
+		} catch (final Exception e) {
+			throw new ContentException(e);
+		}
+
+	}
+
+	/**
 	 * Unmarshall de jaxb object content in the iFile
-	 * 
+	 *
 	 * @param file
 	 *            the repostiory file
 	 * @return the jaxb bean
@@ -58,16 +89,16 @@ public class DitaTools {
 	 * @see Task
 	 * @see Topic
 	 * @throws ContentException
-	 * 
+	 *
 	 */
 
 	public static Object getDitaDocument(iFile file) throws ContentException {
 		try {
 			;
-			byte[] content = file.getContent();
-			DitaTypes type = getDataType(content);
-			return getDitaDocument(file, type);
-		} catch (Exception e) {
+			final byte[] content = file.getContent();
+			final DitaTypes type = DitaTools.getDataType(content);
+			return DitaTools.getDitaDocument(file, type);
+		} catch (final Exception e) {
 			throw new ContentException(e);
 		}
 
@@ -75,7 +106,7 @@ public class DitaTools {
 
 	/**
 	 * Unmarshall de jaxb object content in the iFile
-	 * 
+	 *
 	 * @param file
 	 *            the repository file
 	 * @param type
@@ -95,23 +126,23 @@ public class DitaTools {
 			throws ContentException {
 		try {
 			;
-			byte[] content = file.getContent();
-			JAXBContext jc = JAXBContext.newInstance(type.getPackage()); //$NON-NLS-1$
-			SAXParserFactory spf = SAXParserFactory.newInstance();
+			final byte[] content = file.getContent();
+			final JAXBContext jc = JAXBContext.newInstance(type.getPackage());
+			final SAXParserFactory spf = SAXParserFactory.newInstance();
 			spf.setFeature(
 					"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 					false);
 			spf.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
 			spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			XMLReader xmlReader = spf.newSAXParser().getXMLReader();
-			ByteArrayInputStream bais = new ByteArrayInputStream(content);
-			InputSource inputSource = new InputSource(bais);
-			SAXSource source = new SAXSource(xmlReader, inputSource);
+			final XMLReader xmlReader = spf.newSAXParser().getXMLReader();
+			final ByteArrayInputStream bais = new ByteArrayInputStream(content);
+			final InputSource inputSource = new InputSource(bais);
+			final SAXSource source = new SAXSource(xmlReader, inputSource);
 
-			Unmarshaller unmarshaller = jc.createUnmarshaller();
+			final Unmarshaller unmarshaller = jc.createUnmarshaller();
 			return unmarshaller.unmarshal(source);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ContentException(e);
 		}
 
@@ -119,7 +150,7 @@ public class DitaTools {
 
 	/**
 	 * Get the type of Dita document of the repository file
-	 * 
+	 *
 	 * @see Bookmap
 	 * @see Concept
 	 * @see Glossgroup
@@ -133,45 +164,6 @@ public class DitaTools {
 	 * @throws ContentException
 	 */
 	public static DitaTypes getDitaType(iFile content) throws ContentException {
-		return getDataType(content.getContent());
-	}
-
-	/**
-	 * Get the type of Dita document of the repository file
-	 * 
-	 * @see Bookmap
-	 * @see Concept
-	 * @see Glossgroup
-	 * @see Glossentry
-	 * @see Map
-	 * @see Reference
-	 * @see Task
-	 * @see Topic
-	 * @param content
-	 * @return
-	 * @throws ContentException
-	 */
-	public static DitaTypes getDataType(byte[] content) throws ContentException {
-		try {
-			ByteArrayInputStream bais = new ByteArrayInputStream(content);
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			dbFactory
-					.setFeature(
-							"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
-							false);
-			dbFactory.setFeature("http://xml.org/sax/features/validation", //$NON-NLS-1$
-					false);
-			dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			DocumentBuilder dBuilder;
-
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(bais);
-			DitaTypes type = DitaTypes.get(doc.getDoctype().getName());
-			return type;
-		} catch (Exception e) {
-			throw new ContentException(e);
-		}
-
+		return DitaTools.getDataType(content.getContent());
 	}
 }

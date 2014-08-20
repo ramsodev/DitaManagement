@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -26,75 +25,34 @@ import org.apache.lucene.util.Version;
 
 public class ContentIndexer {
 
-	private static String indexPath;
 	private static ContentIndexer contentIndexer;
+	private static String indexPath;
+
+	public static void configure(String path) {
+		ContentIndexer.indexPath = path;
+	}
+
+	public static ContentIndexer getInstance() {
+		if (ContentIndexer.contentIndexer == null) {
+			ContentIndexer.contentIndexer = new ContentIndexer();
+		}
+		return ContentIndexer.contentIndexer;
+	}
+
 	private IndexWriter indexWriter;
 
 	protected ContentIndexer() {
 		try {
 			init();
-		} catch (ConfigException e) {
+		} catch (final ConfigException e) {
 			LogManager.error("[Content Indexer] fail initializing", e);
-		}
-	}
-
-	public static ContentIndexer getInstance() {
-		if (contentIndexer == null) {
-			contentIndexer = new ContentIndexer();
-		}
-		return contentIndexer;
-	}
-
-	public static void configure(String path) {
-		indexPath = path;
-	}
-
-	@PostConstruct
-	public void init() throws ConfigException {
-		if (indexPath != null) {
-			StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_4_9);
-			Directory index;
-			try {
-				index = new SimpleFSDirectory(new File(indexPath));
-				IndexWriterConfig config = new IndexWriterConfig(
-						Version.LUCENE_4_9, analyzer);
-
-				indexWriter = new IndexWriter(index, config);
-				LogManager
-						.info("-------------Indexer Initialized----------------\n----"
-								+ indexWriter.numDocs() + " Documents indexed");
-
-			} catch (IOException e) {
-				throw new ConfigException("Impossible to configure lucene", e);
-			}
-		} else {
-			throw new ConfigException("The path of the index is null");
-		}
-	}
-
-	public void close() throws IndexException {
-		try {
-			indexWriter.deleteUnusedFiles();
-			indexWriter.commit();
-			indexWriter.close();
-		} catch (IOException e) {
-			throw new IndexException("Fail closing the index", e);
-		}
-	}
-
-	public void clean() throws IndexException {
-		try {
-			indexWriter.deleteAll();
-			indexWriter.commit();
-		} catch (IOException e) {
-			throw new IndexException("Fail to clean the index", e);
 		}
 	}
 
 	public void add(Map<String, String> metadata, String content)
 			throws IndexException {
-		Document doc = new Document();
-		for (Entry<String, String> entry : metadata.entrySet()) {
+		final Document doc = new Document();
+		for (final Entry<String, String> entry : metadata.entrySet()) {
 			doc.add(new TextField(entry.getKey(), entry.getValue(),
 					Field.Store.YES));
 		}
@@ -103,27 +61,71 @@ public class ContentIndexer {
 		}
 		try {
 			indexWriter.addDocument(doc);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new IndexException("Fail to add to index", e);
+		}
+	}
+
+	public void clean() throws IndexException {
+		try {
+			indexWriter.deleteAll();
+			indexWriter.commit();
+		} catch (final IOException e) {
+			throw new IndexException("Fail to clean the index", e);
+		}
+	}
+
+	public void close() throws IndexException {
+		try {
+			indexWriter.deleteUnusedFiles();
+			indexWriter.commit();
+			indexWriter.close();
+		} catch (final IOException e) {
+			throw new IndexException("Fail closing the index", e);
+		}
+	}
+
+	public IndexWriter getIndexWriter() {
+		return indexWriter;
+	}
+
+	@PostConstruct
+	public void init() throws ConfigException {
+		if (ContentIndexer.indexPath != null) {
+			final StandardAnalyzer analyzer = new StandardAnalyzer(
+					Version.LUCENE_4_9);
+			Directory index;
+			try {
+				index = new SimpleFSDirectory(
+						new File(ContentIndexer.indexPath));
+				final IndexWriterConfig config = new IndexWriterConfig(
+						Version.LUCENE_4_9, analyzer);
+
+				indexWriter = new IndexWriter(index, config);
+				LogManager
+				.info("-------------Indexer Initialized----------------\n----"
+						+ indexWriter.numDocs() + " Documents indexed");
+
+			} catch (final IOException e) {
+				throw new ConfigException("Impossible to configure lucene", e);
+			}
+		} else {
+			throw new ConfigException("The path of the index is null");
 		}
 	}
 
 	public void remove(String name) throws IndexException {
 		try {
-			QueryParser parser = new QueryParser(Version.LUCENE_4_9, "Path",
-					new StandardAnalyzer(Version.LUCENE_4_9));
-			Query query = parser.parse(name);
+			final QueryParser parser = new QueryParser(Version.LUCENE_4_9,
+					"Path", new StandardAnalyzer(Version.LUCENE_4_9));
+			final Query query = parser.parse(name);
 			getIndexWriter().deleteDocuments(query);
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			throw new IndexException("Fail to delete in index", e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new IndexException("Fail to delete in index", e);
 		}
 
-	}
-
-	public IndexWriter getIndexWriter() {
-		return indexWriter;
 	}
 
 }

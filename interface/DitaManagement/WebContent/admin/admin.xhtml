@@ -1,0 +1,38 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition template="/WEB-INF/templates/AdminTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="form">
+		
+			<p:panel  id="config" rendered="#{adminBean.config}" style="height:100%">
+				<ui:include src="config.xhtml"></ui:include>
+			</p:panel> 
+			<p:panel  id="realms" rendered="#{adminBean.realm}" style="height:100%">
+				<ui:include src="realm.xhtml"></ui:include>
+			</p:panel>
+			<p:panel  id="users" rendered="#{adminBean.users}" style="height:100%">
+				<ui:include src="users.xhtml"></ui:include>
+			</p:panel>
+			<p:panel  id="roles2" rendered="#{adminBean.roles}" style="height:100%">
+				<ui:include src="roles.xhtml"></ui:include>
+			</p:panel>
+			<p:panel  id="log" rendered="#{adminBean.log}" style="height:100%">
+				<ui:include src="logSetup.xhtml"></ui:include>
+			</p:panel>
+			<p:panel  id="repo" rendered="#{adminBean.repo}" style="height:100%">
+				<ui:include src="repoSetup.xhtml"></ui:include>
+			</p:panel>
+			<p:panel  id="jta" rendered="#{adminBean.jta}" style="height:100%">
+				<ui:include src="jtaSetup.xhtml"></ui:include>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

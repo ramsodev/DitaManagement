@@ -1,8 +1,6 @@
 package net.ramso.utils;
 
-
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,11 +23,53 @@ import java.util.Vector;
 public class ResourcesLocator implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private String name;
+
+	private static File searchDirectories(String[] paths, String filename) {
+		SecurityException exception = null;
+		for (final String path : paths) {
+			try {
+				final File file = new File(path, filename);
+				if (file.exists() && !file.isDirectory()) {
+					return file;
+				}
+			} catch (final SecurityException e) {
+				exception = e;
+			}
+		}
+
+		if (exception != null) {
+			throw exception;
+		} else {
+			return null;
+		}
+	}
+
+	private static String[] split(String str, String delim) {
+		final Vector<String> v = new Vector<String>();
+		final StringTokenizer tokenizer = new StringTokenizer(str, delim);
+		while (tokenizer.hasMoreTokens()) {
+			v.addElement(tokenizer.nextToken());
+		}
+		final String[] ret = new String[v.size()];
+		v.copyInto(ret);
+		return ret;
+	}
+
+	private static File urlToFile(URL res) {
+		final String externalForm = res.toExternalForm();
+		if (externalForm.startsWith("file:")) { //$NON-NLS-1$
+			return new File(externalForm.substring(5));
+		}
+		return null;
+	}
+
 	private File file;
+
+	private String name;
+
 	private URL url;
 
 	public ResourcesLocator(String name) throws IOException {
@@ -42,7 +82,7 @@ public class ResourcesLocator implements Serializable {
 			if (tryClasspath(name)) {
 				return;
 			}
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			exception = e; // Save for later.
 		}
 
@@ -52,7 +92,7 @@ public class ResourcesLocator implements Serializable {
 			if (tryLoader(name)) {
 				return;
 			}
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			exception = e; // Save for later.
 		}
 
@@ -64,19 +104,27 @@ public class ResourcesLocator implements Serializable {
 
 		throw new IOException(
 				"ResourceLocator '" //$NON-NLS-1$
-						+ name
-						+ "' could not be found in " //$NON-NLS-1$
-						+ "the CLASSPATH (" //$NON-NLS-1$
-						+ System.getProperty("java.class.path") //$NON-NLS-1$
-						+ "), nor could it be located by the classloader responsible for the " //$NON-NLS-1$
-						+ "web application (WEB-INF/classes)" + msg); //$NON-NLS-1$
+				+ name
+				+ "' could not be found in " //$NON-NLS-1$
+				+ "the CLASSPATH (" //$NON-NLS-1$
+				+ System.getProperty("java.class.path") //$NON-NLS-1$
+				+ "), nor could it be located by the classloader responsible for the " //$NON-NLS-1$
+				+ "web application (WEB-INF/classes)" + msg); //$NON-NLS-1$
 	}
 
 	/**
-	 * Returns the resource name, as passed to the constructor
+	 * Returns the directory containing the resource, or null if the resource
+	 * isn't directly available on the filesystem. This value can be used to
+	 * locate the configuration file on disk, or to write files in the same
+	 * directory.
 	 */
-	public String getName() {
-		return name;
+	public String getDirectory() {
+		if (file != null) {
+			return file.getParent();
+		} else if (url != null) {
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -87,6 +135,20 @@ public class ResourcesLocator implements Serializable {
 			return new BufferedInputStream(new FileInputStream(file));
 		} else if (url != null) {
 			return new BufferedInputStream(url.openStream());
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the resource name, as passed to the constructor
+	 */
+	public String getName() {
+		return name;
+	}
+
+	public OutputStream getOutputStream() throws FileNotFoundException {
+		if (file != null) {
+			return new FileOutputStream(file);
 		}
 		return null;
 	}
@@ -105,100 +167,39 @@ public class ResourcesLocator implements Serializable {
 		} else if (url != null) {
 			try {
 				return url.openConnection().getLastModified(); // Hail Mary
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				return Long.MAX_VALUE;
 			}
 		}
 		return 0; // can't happen
 	}
 
-	/**
-	 * Returns the directory containing the resource, or null if the resource
-	 * isn't directly available on the filesystem. This value can be used to
-	 * locate the configuration file on disk, or to write files in the same
-	 * directory.
-	 */
-	public String getDirectory() {
-		if (file != null) {
-			return file.getParent();
-		} else if (url != null) {
-			return null;
-		}
-		return null;
+	@Override
+	public String toString() {
+		return "[ResourceLocator: File: " + file + " URL: " + url + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	// Returns true if found
 	private boolean tryClasspath(String filename) {
-		String classpath = System.getProperty("java.class.path"); //$NON-NLS-1$
-		String[] paths = split(classpath, File.pathSeparator);
-		file = searchDirectories(paths, filename);
+		final String classpath = System.getProperty("java.class.path"); //$NON-NLS-1$
+		final String[] paths = ResourcesLocator.split(classpath,
+				File.pathSeparator);
+		file = ResourcesLocator.searchDirectories(paths, filename);
 		return (file != null);
 	}
 
-	private static File searchDirectories(String[] paths, String filename) {
-		SecurityException exception = null;
-		for (int i = 0; i < paths.length; i++) {
-			try {
-				File file = new File(paths[i], filename);
-				if (file.exists() && !file.isDirectory()) {
-					return file;
-				}
-			} catch (SecurityException e) {
-				exception = e;
-			}
-		}
-		
-		if (exception != null) {
-			throw exception;
-		} else {
-			return null;
-		}
-	}
-
-	
-	private static String[] split(String str, String delim) {
-		Vector<String> v = new Vector<String>();
-		StringTokenizer tokenizer = new StringTokenizer(str, delim);
-		while (tokenizer.hasMoreTokens()) {
-			v.addElement(tokenizer.nextToken());
-		}
-		String[] ret = new String[v.size()];
-		v.copyInto(ret);
-		return ret;
-	}
-
-	
 	private boolean tryLoader(String name) {
 		name = "/" + name; //$NON-NLS-1$
-		URL res = ResourcesLocator.class.getResource(name);
+		final URL res = ResourcesLocator.class.getResource(name);
 		if (res == null) {
 			return false;
 		}
-		File resFile = urlToFile(res);
+		final File resFile = ResourcesLocator.urlToFile(res);
 		if (resFile != null) {
 			file = resFile;
 		} else {
 			url = res;
 		}
 		return true;
-	}
-
-	private static File urlToFile(URL res) {
-		String externalForm = res.toExternalForm();
-		if (externalForm.startsWith("file:")) { //$NON-NLS-1$
-			return new File(externalForm.substring(5));
-		}
-		return null;
-	}
-
-	public String toString() {
-		return "[ResourceLocator: File: " + file + " URL: " + url + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	}
-
-	public OutputStream getOutputStream() throws FileNotFoundException {
-		if (file != null) {
-			return new  FileOutputStream(file);
-		} 
-		return null;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository;
 
@@ -10,7 +10,12 @@ package net.ramso.dita.repository;
 public class ContentException extends Exception {
 
 	/**
-	 * 
+	 *
+	 */
+	private static final long serialVersionUID = -978584849156500756L;
+
+	/**
+	 *
 	 */
 	public ContentException() {
 		// TODO Auto-generated constructor stub
@@ -21,14 +26,6 @@ public class ContentException extends Exception {
 	 */
 	public ContentException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param cause
-	 */
-	public ContentException(Throwable cause) {
-		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -50,6 +47,14 @@ public class ContentException extends Exception {
 	public ContentException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @param cause
+	 */
+	public ContentException(Throwable cause) {
+		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 

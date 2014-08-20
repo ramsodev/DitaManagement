@@ -33,5 +33,10 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/dita.bookmap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dita.xsd"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/openjpa2.1">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

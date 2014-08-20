@@ -1,13 +1,7 @@
 package net.ramso.dita.repository.svn;
 
-import java.io.File;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import net.ramso.dita.bookmap.Bookmap;
 import net.ramso.dita.repository.iFile;
-import net.ramso.dita.repository.iFolder;
 import net.ramso.dita.repository.content.ContentFactory;
 import net.ramso.utils.ApplicationConfiguration;
 

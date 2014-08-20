@@ -1,0 +1,113 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:facet name="header">
+	<p:outputLabel value="Users"></p:outputLabel>
+</f:facet>
+
+<p:toolbar>
+	<f:facet name="left">
+		<p:commandButton title="#{msg['toolbar.config.add']}"
+			actionListener="#{usersBean.add}"
+			update=":messages, :form:user, :form:editUser "
+			oncomplete="PF('usersDetail').show()" icon="ui-icon-plus"
+			value="Add User" />
+
+
+	</f:facet>
+</p:toolbar>
+<p:dataTable id="user" var="user" value="#{usersBean.users}"
+	widgetVar="celluser" rows="10" paginator="true"
+	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+	rowsPerPageTemplate="5,10,15,20" rowKey="#{user.userid}"
+	sortBy="#{user.userid}" sortOrder="ascending">
+	<p:column style="width:16px">
+		<p:rowToggler />
+	</p:column>
+	<p:column headerText="Options" style="width:80px;text-align: center">
+		<p:commandButton update=":messages, :form:editUser"
+			actionListener="#{usersBean.update}"
+			oncomplete="PF('usersDetail').show()" icon="ui-icon-pencil"
+			title="Edit">
+			<f:setPropertyActionListener value="#{user}"
+				target="#{usersBean.selected4edit}" />
+		</p:commandButton>
+
+		<p:commandButton title="#{msg['toolbar.config.delete']}"
+			icon="ui-icon-trash" actionListener="#{usersBean.delete}"
+			update=":messages, :form:user ">
+			<f:setPropertyActionListener value="#{user}"
+				target="#{usersBean.selected4edit}" />
+		</p:commandButton>
+	</p:column>
+	<p:column headerText="User ID" sortBy="#{user.userid}">
+		<p:outputLabel>#{user.userid}</p:outputLabel>
+	</p:column>
+	<p:column headerText="Password">
+		<p:outputLabel>#{user.password}</p:outputLabel>
+	</p:column>
+	<p:column headerText="User Name" sortBy="#{user.name}">
+		<p:outputLabel> #{user.name}</p:outputLabel>
+	</p:column>
+	<p:column headerText="email" sortBy="#{user.email}">
+		<p:outputLabel> #{user.email}</p:outputLabel>
+	</p:column>
+	<p:column headerText="User Theme" sortBy="#{user.theme}">
+		<p:outputLabel>#{user.theme}</p:outputLabel>
+	</p:column>
+	<p:rowExpansion>
+		<p:panel>
+			<f:facet name="header">
+				<p:outputLabel value="Assigned User Roles"></p:outputLabel>
+			</f:facet>
+			<p:orderList value="#{user.roles}" var="role" controlsLocation="none"
+				itemLabel="#{role.role} - #{role.description}" itemValue="#{role}" />
+			<h:form>
+
+			</h:form>
+		</p:panel>
+	</p:rowExpansion>
+</p:dataTable>
+
+<p:dialog id="editUser" header="User Details" widgetVar="usersDetail"
+	modal="false" showEffect="fade" hideEffect="fade" resizable="true"
+	width="300">
+	<p:panelGrid columns="2" cellpadding="5" styleClass="cus-grid-panel">
+		<p:outputLabel for="dUserId">UserID</p:outputLabel>
+		<p:inputText id="dUserId" value="#{usersBean.selected4edit.userid}"
+			readonly="#{usersBean.change}" maxlength="50"></p:inputText>
+		<p:outputLabel for="dPassword">Password</p:outputLabel>
+		<p:password id="dPassword" maxlength="20"
+			value="#{usersBean.selected4edit.password}" redisplay="true"
+			inline="true" feedback="true" />
+		<p:outputLabel for="dName">User Name</p:outputLabel>
+		<p:inputText id="dName" value="#{usersBean.selected4edit.name}"
+			maxlength="255" />
+		<p:outputLabel for="dEmail">@email</p:outputLabel>
+		<p:inputText id="dEmail" value="#{usersBean.selected4edit.email}"
+			maxlength="255" />
+		<p:outputLabel for="dTheme">Theme</p:outputLabel>
+		<p:inputText id="dTheme" value="#{usersBean.selected4edit.theme}"
+			maxlength="50" />
+		<p:outputLabel for="dRoles">Roles Assigned</p:outputLabel>
+		<p:selectManyMenu id="dRoles" value="#{usersBean.selectedRole}"
+			label="Roles" filter="true" filterMatchMode="startsWith"
+			showCheckbox="true">
+			<f:selectItems value="#{usersBean.roles}" />
+		</p:selectManyMenu>
+
+		<p:commandButton actionListener="#{usersBean.save}"
+			update=":messages, :form:user" oncomplete="PF('usersDetail').hide()"
+			icon="ui-icon-disk" value="Save"></p:commandButton>
+		<p:commandButton oncomplete="PF('usersDetail').hide()"
+			icon="ui-icon-close" value="Cancel"></p:commandButton>
+	</p:panelGrid>
+</p:dialog>
+
+
+
+</html>

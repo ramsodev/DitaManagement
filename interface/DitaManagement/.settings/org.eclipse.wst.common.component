@@ -15,9 +15,6 @@
         <dependent-module archiveName="slf4j-api-1.7.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/slf4j-api-1.7.7.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="openjpa-all-2.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/openjpa-all-2.0.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="dita.map.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/dita.map.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -58,6 +55,9 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="lucene-analyzers-common-4.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/framework/libs/lucene-analyzers-common-4.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dita.jpa.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dita.jpa/dita.jpa">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="DitaManagement"/>

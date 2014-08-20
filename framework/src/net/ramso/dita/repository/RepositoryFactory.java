@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository;
 
@@ -18,32 +18,33 @@ public class RepositoryFactory {
 	private static Properties properties = new Properties();
 	private static IRepository repository;
 
+	public static void config(Properties prop) {
+		RepositoryFactory.properties = prop;
+	}
+
 	/**
 	 * Create and configure the repository class assigned in the configuration
 	 * properties
-	 * 
+	 *
 	 * @return
 	 * @throws RepositoryException
 	 */
 	public static IRepository getRepositoryInstance()
 			throws RepositoryException {
-		if (repository == null) {
+		if (RepositoryFactory.repository == null) {
 			try {
-				Class<?> c = Class.forName(properties
+				final Class<?> c = Class.forName(RepositoryFactory.properties
 						.getProperty("repository.factory")); //$NON-NLS-1$
-				Constructor<?> cons = c.getConstructor();
-				repository = (IRepository) cons.newInstance();
-				repository.setup(properties);
-			} catch (Exception e) {
+				final Constructor<?> cons = c.getConstructor();
+				RepositoryFactory.repository = (IRepository) cons.newInstance();
+				RepositoryFactory.repository
+						.setup(RepositoryFactory.properties);
+			} catch (final Exception e) {
 				throw new RepositoryException(
 						Messages.getString("RepositoryFactory.exception.msg"), e); //$NON-NLS-1$
 			}
 		}
-		return repository;
-	}
-
-	public static void config(Properties prop) {
-		properties = prop;
+		return RepositoryFactory.repository;
 	}
 
 }

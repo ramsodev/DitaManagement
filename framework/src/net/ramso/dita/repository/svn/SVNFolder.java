@@ -1,20 +1,20 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository.svn;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.io.SVNRepository;
-
 import net.ramso.dita.repository.AbstractFolder;
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iContent;
 import net.ramso.dita.repository.iFolder;
+
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * @author ramso
@@ -22,11 +22,15 @@ import net.ramso.dita.repository.iFolder;
  */
 public class SVNFolder extends AbstractFolder implements iFolder {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -2435994501221318847L;
 	private SVNRepository repository;
 	private String version;
 
 	/**
-	 * 
+	 *
 	 */
 	public SVNFolder() {
 		// TODO Auto-generated constructor stub
@@ -44,11 +48,11 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 				if (!SVNTools.exist(repository, path)) {
 					setNew(true);
 				}
-			} catch (SVNException e) {
+			} catch (final SVNException e) {
 				e.printStackTrace();
 			}
 
-		} catch (ContentException e) {
+		} catch (final ContentException e) {
 			e.printStackTrace();
 		}
 	}
@@ -70,10 +74,10 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 
 				}
 			}
-		} catch (SVNException e) {
+		} catch (final SVNException e) {
 			try {
 				SVNTools.abort();
-			} catch (SVNException e1) {
+			} catch (final SVNException e1) {
 				throw new ContentException(e);
 			}
 			throw new ContentException(e);
@@ -83,24 +87,7 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 		rename(null);
 		setModify(false);
 		setDelete(false);
-		version=null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#update()
-	 */
-	@Override
-	public void update() throws ContentException {
-		childs = null;
-		getChilds();
-		setNew(false);
-		rename(null);
-		setModify(false);
-		setDelete(false);
-		version=null;
-
+		version = null;
 	}
 
 	@Override
@@ -112,8 +99,9 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 			}
 			Collection<SVNDirEntry> entries;
 			try {
-				entries = repository.getDir(getPath(), -1, null, (Collection) null);
-				for (SVNDirEntry entry : entries) {
+				entries = repository.getDir(getPath(), -1, null,
+						(Collection) null);
+				for (final SVNDirEntry entry : entries) {
 					if (entry.getKind() == SVNNodeKind.DIR) {
 						childs.add(new SVNFolder(repository, getPath() + "/" //$NON-NLS-1$
 								+ entry.getRelativePath()));
@@ -122,16 +110,11 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 								+ entry.getRelativePath()));
 					}
 				}
-			} catch (SVNException e) {
+			} catch (final SVNException e) {
 				throw new ContentException(e);
 			}
 		}
 		return childs;
-	}
-
-	@Override
-	public String toString() {
-		return getPath();
 	}
 
 	@Override
@@ -146,15 +129,37 @@ public class SVNFolder extends AbstractFolder implements iFolder {
 			try {
 				entries = repository.getDir(getPath(), -1, null,
 						(Collection) null);
-				for (SVNDirEntry entry : entries) {
+				for (final SVNDirEntry entry : entries) {
 					version = "Last Revision: " + entry.getRevision()
 							+ " Message: " + entry.getCommitMessage();
 				}
-			} catch (SVNException e) {
+			} catch (final SVNException e) {
 				throw new ContentException(e);
 			}
 		}
 		return version;
+	}
+
+	@Override
+	public String toString() {
+		return getPath();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see net.ramso.dita.repository.iContent#update()
+	 */
+	@Override
+	public void update() throws ContentException {
+		childs = null;
+		getChilds();
+		setNew(false);
+		rename(null);
+		setModify(false);
+		setDelete(false);
+		version = null;
+
 	}
 
 }

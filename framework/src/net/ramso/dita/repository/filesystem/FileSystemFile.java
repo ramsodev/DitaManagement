@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.repository.filesystem;
 
@@ -22,8 +22,12 @@ import net.ramso.utils.Messages;
  */
 public class FileSystemFile extends AbstractFile implements iFile {
 
-	private File file;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 8611813995985388136L;
 	private byte[] content;
+	private File file;
 
 	public FileSystemFile(File file) {
 		super();
@@ -46,40 +50,7 @@ public class FileSystemFile extends AbstractFile implements iFile {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#getPath()
-	 */
-	@Override
-	public String getPath() {
-		return file.getPath();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#setPath(java.lang.String)
-	 */
-	@Override
-	public void setPath(String path) throws ContentException {
-		try {
-			file = new File(path);
-
-			if (!file.isFile()) {
-				throw new ContentException(Messages.getString(
-						"FileSystemFile.exception.msg", path)); //$NON-NLS-1$
-			}
-			if (!file.exists()) {
-				setNew(true);
-			}
-		} catch (Exception e) {
-			throw new ContentException(e);
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see net.ramso.dita.repository.iContent#commit()
 	 */
 	@Override
@@ -88,8 +59,8 @@ public class FileSystemFile extends AbstractFile implements iFile {
 		try {
 			if (isModify() || isNew()) {
 				file.createNewFile();
-				if (getContent() == null || getContent().length < 1) {
-					
+				if ((getContent() == null) || (getContent().length < 1)) {
+
 				} else {
 					addToIndex();
 					Files.write(file.toPath(), getContent(),
@@ -101,15 +72,15 @@ public class FileSystemFile extends AbstractFile implements iFile {
 			}
 			if (isRename()) {
 				removeFromIndex();
-				File file2 = new File(file.getParent(), name);
+				final File file2 = new File(file.getParent(), name);
 				file.renameTo(file2);
 				addToIndex();
 			}
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			throw new ContentException(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new ContentException(e);
-		} catch (IndexException e) {
+		} catch (final IndexException e) {
 			throw new ContentException(e);
 		}
 
@@ -120,12 +91,13 @@ public class FileSystemFile extends AbstractFile implements iFile {
 
 	}
 
+	@Override
 	public byte[] getContent() throws ContentException {
-		if(content == null){
+		if (content == null) {
 			content = new byte[0];
 			try {
 				content = Files.readAllBytes(file.toPath());
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new ContentException(e);
 			}
 		}
@@ -134,30 +106,12 @@ public class FileSystemFile extends AbstractFile implements iFile {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see net.ramso.dita.repository.iContent#update()
+	 *
+	 * @see net.ramso.dita.repository.iContent#getPath()
 	 */
 	@Override
-	public void update() throws ContentException {
-		try {
-			setContent(Files.readAllBytes(file.toPath()));
-		} catch (IOException e) {
-			throw new ContentException(e);
-		}
-		setModify(false);
-		setNew(false);
-		setDelete(false);
-		rename(null);
-
-	}
-
-	@Override
-	public void setContent(byte[] content) {
-		this.content = content;
-		type = null;
-		setModify(true);
-		size = null;
-		type = null;
+	public String getPath() {
+		return file.getPath();
 	}
 
 	@Override
@@ -172,8 +126,59 @@ public class FileSystemFile extends AbstractFile implements iFile {
 	}
 
 	@Override
+	public void setContent(byte[] content) {
+		this.content = content;
+		type = null;
+		setModify(true);
+		size = null;
+		type = null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see net.ramso.dita.repository.iContent#setPath(java.lang.String)
+	 */
+	@Override
+	public void setPath(String path) throws ContentException {
+		try {
+			file = new File(path);
+
+			if (!file.isFile()) {
+				throw new ContentException(Messages.getString(
+						"FileSystemFile.exception.msg", path)); //$NON-NLS-1$
+			}
+			if (!file.exists()) {
+				setNew(true);
+			}
+		} catch (final Exception e) {
+			throw new ContentException(e);
+		}
+
+	}
+
+	@Override
 	public String toString() {
 		return getPath();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see net.ramso.dita.repository.iContent#update()
+	 */
+	@Override
+	public void update() throws ContentException {
+		try {
+			setContent(Files.readAllBytes(file.toPath()));
+		} catch (final IOException e) {
+			throw new ContentException(e);
+		}
+		setModify(false);
+		setNew(false);
+		setDelete(false);
+		rename(null);
+
 	}
 
 }

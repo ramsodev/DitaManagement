@@ -1,0 +1,66 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:facet name="header">
+	<p:outputLabel value="Roles"></p:outputLabel>
+</f:facet>
+<p:toolbar>
+	<f:facet name="left">
+		<p:commandButton title="#{msg['toolbar.config.add']}"
+			actionListener="#{rolesBean.add}"
+			update=":messages, :form:role, :form:editrole "
+			oncomplete="PF('rolesDetail').show()" icon="ui-icon-plus" value="Add role" />
+	</f:facet>
+</p:toolbar>
+
+<p:dataTable id="role" var="role"
+	value="#{rolesBean.roles}" widgetVar="cellrol" rows="10"
+	paginator="true"
+	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+	rowsPerPageTemplate="5,10,15,20"  rowKey="#{role.role}"
+	sortBy="#{role.role}" sortOrder="ascending">
+	
+	<p:column headerText="Options" style="width:55px;text-align: center">
+		<p:commandButton update=":messages, :form:editrole"
+			actionListener="#{rolesBean.update}"
+			oncomplete="PF('rolesDetail').show()" icon="ui-icon-pencil"
+			title="Edit">
+			<f:setPropertyActionListener value="#{role}"
+				target="#{rolesBean.selected4edit}" />
+		</p:commandButton>
+
+		<p:commandButton title="#{msg['toolbar.config.delete']}"
+			icon="ui-icon-trash" actionListener="#{rolesBean.delete}"
+			update=":messages, :form:role ">
+			<f:setPropertyActionListener value="#{role}"
+				target="#{rolesBean.selected4edit}" />
+		</p:commandButton>
+	</p:column>
+	<p:column headerText="Role ID" sortBy="#{role.role}">
+		<p:outputLabel value="#{role.role}" />
+	</p:column>
+	<p:column headerText="Description">
+		<p:outputLabel value="#{role.description}" />
+	</p:column>
+</p:dataTable>
+<p:dialog id="editrole" header="role Details" widgetVar="rolesDetail"
+	modal="false" showEffect="fade" hideEffect="fade" resizable="true"
+	width="300">
+	<p:panelGrid columns="2" cellpadding="5" styleClass="cus-grid-panel">
+		<p:outputLabel for="droleId">role</p:outputLabel>
+		<p:inputText id="droleId" value="#{rolesBean.selected4edit.role}" readonly="#{rolesBean.change}" maxlength="50"></p:inputText>
+		<p:outputLabel for="ddescrip">Description</p:outputLabel>
+		<p:inputText id="ddescrip" value="#{rolesBean.selected4edit.description}" maxlength="255"/>
+		<p:commandButton actionListener="#{rolesBean.save}"
+			update=":messages, :form:role"
+			oncomplete="PF('rolesDetail').hide()" icon="ui-icon-disk"
+			value="Save"></p:commandButton>
+		<p:commandButton oncomplete="PF('rolesDetail').hide()"
+			icon="ui-icon-close" value="Cancel"></p:commandButton>
+	</p:panelGrid>
+</p:dialog>
+</html>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.ramso.utils;
 
@@ -10,12 +10,12 @@ package net.ramso.utils;
 public class ConfigException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4246846583492469436L;
 
 	/**
-	 * 
+	 *
 	 */
 	public ConfigException() {
 	}
@@ -25,13 +25,6 @@ public class ConfigException extends Exception {
 	 */
 	public ConfigException(String message) {
 		super(message);
-	}
-
-	/**
-	 * @param cause
-	 */
-	public ConfigException(Throwable cause) {
-		super(cause);
 	}
 
 	/**
@@ -51,6 +44,13 @@ public class ConfigException extends Exception {
 	public ConfigException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	/**
+	 * @param cause
+	 */
+	public ConfigException(Throwable cause) {
+		super(cause);
 	}
 
 }

@@ -1,11 +1,6 @@
 package net.ramso.dita.repository.svn;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.search.ScoreDoc;
 
 import net.ramso.dita.repository.ContentException;
 import net.ramso.dita.repository.iContent;
@@ -16,6 +11,9 @@ import net.ramso.dita.repository.content.ContentIndexer;
 import net.ramso.dita.repository.content.ContentSearchQuery;
 import net.ramso.dita.repository.content.IndexException;
 import net.ramso.utils.ApplicationConfiguration;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.ScoreDoc;
 
 public class Testjaxb {
 

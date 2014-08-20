@@ -6,6 +6,7 @@
 		<project>framework</project>
 		<project>dita.bookmap</project>
 		<project>dita.xsd</project>
+		<project>dita.jpa</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

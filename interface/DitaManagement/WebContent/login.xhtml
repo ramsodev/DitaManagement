@@ -32,6 +32,14 @@
 							</p:column>
 						</p:row>
 						<p:row>
+							<p:column   style="text-align:center;width=50%">
+								<h:outputLabel for="remember" value="Remember me" />
+							</p:column>
+							<p:column style="text-align:center;width=50%">
+								<p:selectBooleanCheckbox id="remember" value="#{loginBean.remember}" />
+							</p:column>
+						</p:row>
+						<p:row>
 							<p:commandButton id="loginButton" value="#{msg['login.button']}"
 								actionListener="#{loginBean.login}" update=":mensajes" />
 						</p:row>

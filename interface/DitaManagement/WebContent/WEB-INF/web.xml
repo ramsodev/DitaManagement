@@ -48,42 +48,30 @@
 	<listener>
 		<listener-class>net.ramso.dita.web.filters.DitaManagementContextListener</listener-class>
 	</listener>
-	
-    <!-- <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Users and admins</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>ADMIN</role-name>
-            <role-name>USER</role-name>
-        </auth-constraint>
-    </security-constraint>
- 
-    Validation By Form
-    <login-config>
-        <auth-method>FORM</auth-method>
-        <form-login-config>
-            <form-login-page>/login.xhtml</form-login-page>
-            <form-error-page>/pages/public/loginError.xhtml</form-error-page>
-        </form-login-config>
-    </login-config>
- 
-    Allowed Roles
-    <security-role>
-        <role-name>ADMIN</role-name>
-    </security-role>
-    <security-role>
-        <role-name>USER</role-name>
-    </security-role>
- 
-    Filter to get the user name and work with it
+	<listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
     <filter>
-        <filter-name>LoginFilter</filter-name>
-        <filter-class>com.filters.LoginFilter</filter-class>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
+        <filter-name>shiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping> -->
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <data-source>
+        <name>jdbc/dita</name>
+        <class-name>org.apache.derby.jdbc.EmbeddedDriver</class-name>
+        <url>jdbc:derby:Database/dita;create=true</url>
+        <user></user>
+        <password></password>
+        <transactional>false</transactional>
+        <max-pool-size>10</max-pool-size>
+        <min-pool-size>5</min-pool-size>
+        <max-statements>0</max-statements>
+    </data-source>
 </web-app>

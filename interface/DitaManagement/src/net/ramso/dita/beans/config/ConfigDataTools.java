@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.ramso.dita.beans.config;
 
@@ -16,26 +16,35 @@ import java.util.Set;
  */
 public class ConfigDataTools {
 
-	public static List<ConfigData> getFromProperties(Properties pro) {
-		ArrayList<ConfigData> configs = new ArrayList<ConfigData>();
-		Enumeration<?> names = pro.propertyNames();
-		while (names.hasMoreElements()) {
-			String key = (String) names.nextElement();
-			configs.add(new ConfigData(key, pro.getProperty(key)));
-		}
-		return configs;
-	}
-
 	public static List<ConfigData> getFromAttributes(
 			Set<Entry<String, Object>> set) {
-		ArrayList<ConfigData> configs = new ArrayList<ConfigData>();
-		for (Entry<String, Object> entry : set) {
-			String key = (String) entry.getKey().toString();
+		final ArrayList<ConfigData> configs = new ArrayList<ConfigData>();
+		for (final Entry<String, Object> entry : set) {
+			final String key = entry.getKey().toString();
 			String value = "";
 			if (entry.getValue() != null) {
 				value = entry.getValue().toString();
 			}
 			configs.add(new ConfigData(key, value));
+		}
+		return configs;
+	}
+
+	public static List<ConfigData> getFromProperties(Properties pro) {
+		final ArrayList<ConfigData> configs = new ArrayList<ConfigData>();
+		final Enumeration<?> names = pro.propertyNames();
+		while (names.hasMoreElements()) {
+			final String key = (String) names.nextElement();
+			configs.add(new ConfigData(key, pro.getProperty(key)));
+		}
+		return configs;
+	}
+
+	public static ArrayList<ConfigData> getFromShiroIni(
+			Set<Entry<String, String>> set) {
+		final ArrayList<ConfigData> configs = new ArrayList<ConfigData>();
+		for (final Entry<String, String> entry : set) {
+			configs.add(new ConfigData(entry.getKey(), entry.getValue()));
 		}
 		return configs;
 	}
