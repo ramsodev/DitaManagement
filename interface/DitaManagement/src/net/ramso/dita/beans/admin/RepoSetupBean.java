@@ -12,6 +12,7 @@ import net.ramso.dita.beans.config.ConfigData;
 import net.ramso.dita.beans.config.ConfigDataTools;
 import net.ramso.dita.beans.tools.ApplicationMessage;
 import net.ramso.dita.repository.IRepository;
+import net.ramso.dita.repository.content.ContentFactory;
 import net.ramso.dita.repository.filesystem.FileSystemRepository;
 import net.ramso.dita.repository.svn.RepositorySVN;
 import net.ramso.utils.ConfManager;
@@ -30,19 +31,42 @@ public class RepoSetupBean extends AbstractConfigEditor implements Serializable 
 	public static final String FACTORYKEY = "repository.factory";
 	public String factory;
 	private String[] repositories;
+	private String project;
+	private String template;
+	private String content;
 
 	@PostConstruct
 	public void initBean() {
 		name = "repository";
 		key = ConfManager.FILEPREFIX + name;
-
+		project = ConfManager.getInstance().getProperty(
+				ContentFactory.PREFIX + ".path.projects");//$NON-NLS-1$
+		template = ConfManager.getInstance().getProperty(
+				ContentFactory.PREFIX + ".path.templates"); //$NON-NLS-1$
+		content = ConfManager.getInstance().getProperty(
+				ContentFactory.PREFIX + ".path.components"); //$NON-NLS-1$
 		initProperties();
 
 	}
 
 	@Override
 	public void save() {
-		final Properties properties = new Properties();
+		Properties properties = new Properties();
+
+		properties.setProperty(ContentFactory.PREFIX + ".path.projects", //$NON-NLS-1$
+				getProject());
+		properties.setProperty(ContentFactory.PREFIX + ".path.templates", //$NON-NLS-1$
+				getTemplate());
+		properties.setProperty(ContentFactory.PREFIX + ".path.components", //$NON-NLS-1$
+				getContent());
+
+		try {
+			ConfManager.getInstance().update(ConfManager.LOGPREFIX, properties);
+		} catch (final ConfigException e) {
+			ApplicationMessage.setError(
+					Messages.getString("ConfigEditorBean.message.save"), e); //$NON-NLS-1$
+		}
+		properties = new Properties();
 		properties.setProperty(FACTORYKEY, getFactory());
 		for (final ConfigData configData : configs) {
 			properties.setProperty(configData.getKey(), configData.getValue());
@@ -77,15 +101,39 @@ public class RepoSetupBean extends AbstractConfigEditor implements Serializable 
 			repositories = new String[2];
 			repositories[0] = FileSystemRepository.class.getName();
 			repositories[1] = RepositorySVN.class.getName();
-//			final List<Class<?>> processorCandidates = ReflectionHelper
-//					.findClassesImpmenenting(IRepository.class,
-//							IRepository.class.getPackage());
-//			repositories = new String[processorCandidates.size()];
-//			int i = 0;
-//			for (Class clazz : processorCandidates) {
-//				repositories[i] = clazz.getName(); 
-//			}
+			// final List<Class<?>> processorCandidates = ReflectionHelper
+			// .findClassesImpmenenting(IRepository.class,
+			// IRepository.class.getPackage());
+			// repositories = new String[processorCandidates.size()];
+			// int i = 0;
+			// for (Class clazz : processorCandidates) {
+			// repositories[i] = clazz.getName();
+			// }
 		}
 		return repositories;
+	}
+
+	public String getProject() {
+		return project;
+	}
+
+	public void setProject(String project) {
+		this.project = project;
+	}
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 }

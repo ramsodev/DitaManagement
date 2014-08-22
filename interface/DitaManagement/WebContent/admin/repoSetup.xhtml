@@ -33,6 +33,12 @@
 		<f:selectItems value="#{repoSetupBean.repositories}" var="type"
 			itemLabel="#{type}" itemValue="#{type}"></f:selectItems>
 	</p:selectOneMenu>
+	<p:outputLabel for="proid" value="Projects path in the repository"></p:outputLabel>
+	<p:inputText id="proid" size="100" maxlength="200" value="#{repoSetupBean.project}"></p:inputText>
+	<p:outputLabel for="temid" value="Templates path in the repository"></p:outputLabel>
+	<p:inputText id="temid" size="100" maxlength="200" value="#{repoSetupBean.template}"></p:inputText>
+	<p:outputLabel for="conid" value="General Content path in the repository"></p:outputLabel>
+	<p:inputText id="conid" size="100" maxlength="200" value="#{repoSetupBean.content}"></p:inputText>
 </p:panelGrid>
 
 <p:dataTable id="datarepo" var="property" value="#{repoSetupBean.configs}"

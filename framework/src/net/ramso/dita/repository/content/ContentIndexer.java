@@ -13,6 +13,7 @@ import net.ramso.utils.LogManager;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -22,6 +23,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import org.apache.tika.metadata.HttpHeaders;
+import org.apache.tika.metadata.TikaMetadataKeys;
 
 public class ContentIndexer {
 
@@ -53,8 +56,13 @@ public class ContentIndexer {
 			throws IndexException {
 		final Document doc = new Document();
 		for (final Entry<String, String> entry : metadata.entrySet()) {
-			doc.add(new TextField(entry.getKey(), entry.getValue(),
-					Field.Store.YES));
+			if (entry.getKey().equals("MIME Type")) {
+				doc.add(new StringField(entry.getKey(), entry.getValue(),
+						Field.Store.YES));
+			} else {
+				doc.add(new TextField(entry.getKey(), entry.getValue(),
+						Field.Store.YES));
+			}
 		}
 		if (content != null) {
 			doc.add(new TextField("content", content, Field.Store.YES));
@@ -103,8 +111,8 @@ public class ContentIndexer {
 
 				indexWriter = new IndexWriter(index, config);
 				LogManager
-				.info("-------------Indexer Initialized----------------\n----"
-						+ indexWriter.numDocs() + " Documents indexed");
+						.info("-------------Indexer Initialized----------------\n----"
+								+ indexWriter.numDocs() + " Documents indexed");
 
 			} catch (final IOException e) {
 				throw new ConfigException("Impossible to configure lucene", e);

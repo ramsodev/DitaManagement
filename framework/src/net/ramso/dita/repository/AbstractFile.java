@@ -212,7 +212,7 @@ public abstract class AbstractFile extends AbstractContent implements iFile {
 					if (ms.equalsIgnoreCase(HttpHeaders.CONTENT_TYPE)) {
 						final String[] ts = meta.get(ms).split(";");
 						if (ts.length > 0) {
-							type = ts[0];
+							this.type = ts[0];
 							if (type.contains("dita") && (ts.length > 1)) {
 								ditaType=DitaTypes.TOPIC;
 								String literal = ts[1].substring(ts[1]

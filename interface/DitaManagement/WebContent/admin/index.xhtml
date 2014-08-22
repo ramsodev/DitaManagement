@@ -1,0 +1,45 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:facet name="header">
+	<p:outputLabel value="Index tools"></p:outputLabel>
+</f:facet>
+
+<p:panelGrid columns="2" cellpadding="5" styleClass="cus-grid-panel">
+	<p:outputLabel for="pathid">Path index store</p:outputLabel>
+	<p:inputText id="pathid" value="#{indexSetupBean.path}" maxlength="200" size="100"></p:inputText>
+	<p:column colspan="2">
+		<p:commandButton actionListener="#{indexSetupBean.save}"
+			icon="ui-icon-disk" value="Save" update=":messages"></p:commandButton>
+	</p:column>
+</p:panelGrid>
+<p:toolbar>
+	<f:facet name="left">
+		<p:outputLabel value="Index Tool"></p:outputLabel>
+		<p:commandButton title="#{msg['toolbar.config.delete']}"
+			icon="ui-icon-trash" actionListener="#{indexSetupBean.clean}"
+			update=":messages " value="Clean Index" />
+		<p:commandButton title="#{msg['toolbar.config.refresh']}"
+			icon="ui-icon-refresh" actionListener="#{indexSetupBean.reIndex}"
+			update=":messages " value="Regenerate the index" />
+	</f:facet>
+</p:toolbar>
+<p:panel 
+	style="max-width:100%">
+	<f:facet name="header">
+		<p:outputLabel value="Index Statistics"></p:outputLabel>
+	</f:facet>
+	
+		<p:outputLabel value="#{indexSetupBean.numDocs} Documents indexed"></p:outputLabel>
+	
+		<p:chart type="bar" model="#{indexSetupBean.mime}"  style="border:1px;"/>
+	
+		<p:chart type="bar" model="#{indexSetupBean.dita}"  style="border:1px;margin-top:25px;"/>
+	
+</p:panel>
+
+</html>

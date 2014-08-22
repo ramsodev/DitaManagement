@@ -93,6 +93,11 @@ public class AdminMenu implements Serializable {
 		item.setCommand("#{adminBean.setType('jta')}");
 		item.setIcon("ui-icon-suitcase");
 		submenu.addElement(item);
+		item = new DefaultMenuItem("Search index");
+		item.setUpdate(":messages :form");
+		item.setCommand("#{adminBean.setType('index')}");
+		item.setIcon("ui-icon-tag");
+		submenu.addElement(item);
 
 		return submenu;
 	}

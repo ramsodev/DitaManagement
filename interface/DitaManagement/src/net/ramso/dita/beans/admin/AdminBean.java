@@ -35,6 +35,8 @@ public class AdminBean implements Serializable {
 	private boolean repo;
 	
 	private boolean jta;
+	
+	private boolean index;
 
 	public Ini getIni() {
 		return ini;
@@ -93,6 +95,7 @@ public class AdminBean implements Serializable {
 		setLog(false);
 		setRepo(false);
 		setJta(false);
+		setIndex(false);
 		if (type.equals("config")) {
 			config = true;
 		} else if (type.equals("realm")) {
@@ -107,6 +110,8 @@ public class AdminBean implements Serializable {
 			repo=true;
 		} else if(type.equals("jta")){
 			jta=true;
+		}else if(type.equals("index")){
+			index=true;
 		}
 		this.type = type;
 	}
@@ -137,6 +142,14 @@ public class AdminBean implements Serializable {
 
 	public void setJta(boolean jta) {
 		this.jta = jta;
+	}
+
+	public boolean isIndex() {
+		return index;
+	}
+
+	public void setIndex(boolean index) {
+		this.index = index;
 	}
 
 }

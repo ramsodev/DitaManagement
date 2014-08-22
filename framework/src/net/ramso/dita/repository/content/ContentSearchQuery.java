@@ -1,6 +1,9 @@
 package net.ramso.dita.repository.content;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -9,14 +12,23 @@ import net.ramso.utils.LogManager;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.DocsEnum;
+import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiFields;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.CollectionStatistics;
+import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.Bits;
+import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.apache.tika.metadata.HttpHeaders;
 
@@ -69,8 +81,8 @@ public class ContentSearchQuery {
 		try {
 			final MultiFieldQueryParser queryParser = new MultiFieldQueryParser(
 					Version.LUCENE_4_9, new String[] { "Content Name", "path",
-							"content", HttpHeaders.CONTENT_TYPE, "Dita Type" },
-							new StandardAnalyzer(Version.LUCENE_4_9));
+							"content", "MIME Type", "Dita Type" },
+					new StandardAnalyzer(Version.LUCENE_4_9));
 			final Query query = queryParser.parse(text);
 			hits = getSearcher().search(query, number).scoreDocs;
 		} catch (final ParseException e) {
@@ -98,5 +110,61 @@ public class ContentSearchQuery {
 			throw new ConfigException("Impossible to configure lucene", e);
 		}
 
+	}
+
+	public IndexStatistis getStatistics() throws IndexException {
+		Bits liveDocs;
+		IndexStatistis statistis = new IndexStatistis();
+		try {
+			liveDocs = MultiFields.getLiveDocs(getSearcher().getIndexReader());
+			String field = "MIME Type";
+			TermsEnum termEnum = MultiFields.getTerms(
+					getSearcher().getIndexReader(), field).iterator(null);
+			BytesRef bytesRef;
+			HashMap<String, Number> terms = new HashMap<String, Number>();
+			while ((bytesRef = termEnum.next()) != null) {
+				if (termEnum.seekExact(bytesRef)) {
+					DocsEnum docsEnum = termEnum.docs(liveDocs, null);
+					if (docsEnum != null) {
+						int doc;
+						while ((doc = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
+							String key = bytesRef.utf8ToString();
+							Integer c = new Integer(0);
+							if (terms.containsKey(key)) {
+								c = (Integer) terms.get(key);
+							}
+							c = c + 1;
+							terms.put(key, c);
+						}
+					}
+				}
+			}
+			statistis.setMime(terms);
+			field = "DITA Type";
+			termEnum = MultiFields.getTerms(getSearcher().getIndexReader(),
+					field).iterator(null);
+			terms = new HashMap<String, Number>();
+			while ((bytesRef = termEnum.next()) != null) {
+				if (termEnum.seekExact(bytesRef)) {
+					DocsEnum docsEnum = termEnum.docs(liveDocs, null);
+					if (docsEnum != null) {
+						int doc;
+						while ((doc = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
+							String key = bytesRef.utf8ToString();
+							Integer c = new Integer(0);
+							if (terms.containsKey(key)) {
+								c = (Integer) terms.get(key);
+							}
+							c = c + 1;
+							terms.put(key, c);
+						}
+					}
+				}
+			}
+			statistis.setDita(terms);
+		} catch (IOException e) {
+			throw new  IndexException("Statistics failed",e);
+		}
+		return statistis;
 	}
 }
