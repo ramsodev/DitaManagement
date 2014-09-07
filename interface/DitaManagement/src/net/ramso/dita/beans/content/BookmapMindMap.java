@@ -165,6 +165,8 @@ public class BookmapMindMap implements Serializable {
 			setSelectedNode(node);
 			addChilds(frontmatter.getBooklistsOrNoticesOrDedication(), node);
 			root.addNode(node);
+			BookMetaMindMap bookMeta = new BookMetaMindMap(bookmap.getBookmeta());
+			root.addNode(bookMeta.getNode());
 			final List<Part> parts = bookmap.getPart();
 			if ((parts != null) && (parts.size() > 0)) {
 				addPartNodes(parts, root);
